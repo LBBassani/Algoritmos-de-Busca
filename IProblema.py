@@ -113,8 +113,9 @@ class IProblemaGRASP(IProblema):
         while len(aux) != 0 :
             melhor = aux
             aux = self.escolheMelhores(self.gerarVizinhos(melhor), m)
-            # FIXME IndexError: list index out of range
-            aux = aux[r.randint(0,len(aux))]
+
+            if aux:
+                aux = aux[r.randint(0,len(aux)-1)]
 
         estado.clear()
         estado.extend(melhor)
