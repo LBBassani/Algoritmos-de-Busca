@@ -162,7 +162,7 @@ def teste():
     paramBS = {"nEstados" : 3}
     paramSA = {"t" : 50, "a" : 0.6, "minT" : 1, "numIter" : 3}
     paramAG = {"maxIter" : 10, "tamanhoPop" : 3, "maxSemMelhora" : 15, "chanceCross" : 0.5, "chanceMutacao" : 0.5}
-    paramGP = {"m" : 3, "numIter" : 10, "metodoBuscaLocal" : [simulatedAnnealing, paramSA]}
+    paramGP = {"m" : 2, "numIter" : 50, "metodoBuscaLocal" : [simulatedAnnealing, paramSA]}
     try:
         m = mochila([(1, 3), (4, 6), (5, 7)], 19)
         metodos = [[hillClimbing, paramHC], [beamSearch, paramBS] , [simulatedAnnealing, paramSA], [algoritmoGenetico, paramAG], [grasp, paramGP]]
@@ -172,7 +172,7 @@ def teste():
                 m.busca(estado, metodo[0], **metodo[1])
             else:
                 m.busca(estado,metodo[0])
-            print("Resultado do Teste com", metodo[0].__name__, ":",estado)
+            print("Resultado do Teste com", metodo[0].__name__, ":", estado, "Valor :", m.valorAtual(estado), "Tamanho :", m.tamanhoAtual(estado))
             estado = m.estadoNulo()
     except NotImplementedError:
         print("Algum método não está implementado")
