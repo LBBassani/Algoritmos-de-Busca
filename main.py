@@ -144,13 +144,13 @@ def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chan
         Necessita de Estado Inicial : Não
 """
 def grasp(problema, estado, m, numIter, metodoBuscaLocal):
-    # TODO: Implementar GRASP
+
     melhor = problema.estadoNulo()
     for _ in range(0, numIter):
         novoEstado = problema.estadoNulo()
         problema.construcaoGulosa(novoEstado, m, random.randint(0, 100))
-        problema.buscaLocal(novoEstado, metodoBuscaLocal[0], metodoBuscaLocal[1])
-        if problema.melhorEstado(melhor, novoEstado):
+        problema.buscaLocal(novoEstado, metodoBuscaLocal[0], **metodoBuscaLocal[1])
+        if problema.melhorEstado([melhor, novoEstado]):
             melhor = novoEstado
     
     estado.clear()
