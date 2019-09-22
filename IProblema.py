@@ -101,3 +101,9 @@ class IProblemaSimulatedAnnealing(IProblema):
             p = p if p >= 0 else -p
             n = r.random()
             return n < p
+
+class IProblemaGRSP(IProblema):
+
+    # método de construção guloso
+    def construcaoGulosa(self, estado, semente):
+        pass
