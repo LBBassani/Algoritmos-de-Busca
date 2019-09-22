@@ -143,9 +143,18 @@ def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chan
             numIter : número de iterações total do algoritmo (critério de parada)
         Necessita de Estado Inicial : Não
 """
-def grasp(problema, estado):
+def grasp(problema, estado, m, numIter, metodoBuscaLocal):
     # TODO: Implementar GRASP
-    pass
+    melhor = problema.estadoNulo()
+    for _ in range(0, numIter):
+        novoEstado = problema.estadoNulo()
+        problema.construcaoGulosa(novoEstado, m, random.randint(0, 100))
+        problema.buscaLocal(novoEstado, metodoBuscaLocal[0], metodoBuscaLocal[1])
+        if problema.melhorEstado(melhor, novoEstado):
+            melhor = novoEstado
+    
+    estado.clear()
+    estado.extend(melhor)
 
 """ Testes dos algoritmos """
 def teste():
@@ -153,7 +162,7 @@ def teste():
     paramBS = {"nEstados" : 3}
     paramSA = {"t" : 50, "a" : 0.6, "minT" : 1, "numIter" : 3}
     paramAG = {"maxIter" : 10, "tamanhoPop" : 3, "maxSemMelhora" : 15, "chanceCross" : 0.5, "chanceMutacao" : 0.5}
-    paramGP = None
+    paramGP = {"m" : 3, "numIter" : 10, "metodoBuscaLocal" : [simulatedAnnealing, paramSA]}
     try:
         m = mochila([(1, 3), (4, 6), (5, 7)], 19)
         metodos = [[hillClimbing, paramHC], [beamSearch, paramBS] , [simulatedAnnealing, paramSA], [algoritmoGenetico, paramAG], [grasp, paramGP]]
