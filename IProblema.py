@@ -102,8 +102,22 @@ class IProblemaSimulatedAnnealing(IProblema):
             n = r.random()
             return n < p
 
-class IProblemaGRSP(IProblema):
+class IProblemaGRASP(IProblema):
 
     # método de construção guloso
-    def construcaoGulosa(self, estado, semente):
-        pass
+    def construcaoGulosa(self, estado, m, semente):
+        melhor = self.estadoNulo()
+        aux = melhor
+        r.seed(semente)
+
+        while len(aux) != 0 :
+            melhor = aux
+            aux = self.escolheMelhores(self.gerarVizinhos(melhor), m)
+            # FIXME IndexError: list index out of range
+            aux = aux[r.randint(0,len(aux))]
+
+        estado.clear()
+        estado.extend(melhor)
+
+    def buscaLocal(self, estado, metodoBuscaLocal, **keyargs):
+        self.busca(estado, metodoBusca= metodoBuscaLocal, **keyargs)
