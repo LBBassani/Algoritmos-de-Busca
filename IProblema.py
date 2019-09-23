@@ -122,3 +122,8 @@ class IProblemaGRASP(IProblema):
 
     def buscaLocal(self, estado, metodoBuscaLocal, **keyargs):
         self.busca(estado, metodoBusca= metodoBuscaLocal, **keyargs)
+
+class IProblemaDescida(IProblema):
+    def escolheMelhores(self, estado, estados):
+        resp = list(filter(lambda x: self.melhorEstado([x, estado] == x), estados))
+        return resp
