@@ -6,19 +6,19 @@ import IProblema
 
 class treinamento:
 
-    def __init__(self, problema, metodo, **keyargs ):
-        self.problema = problema
+    def __init__(self, problemas, metodo, **keyargs ):
+        self.problema = problemas
         self.metodo = metodo
         self.parametros = keyargs
     
-    def treino(self):
+    def treino(self, tempo = 0):
         pass
 
 class teste:
 
-    def __init__(self, problema, metodos):
-        self.problema = problema
-        self.metodos = metodos
+    def __init__(self, problemas, metodo):
+        self.problemas = problemas
+        self.metodo = metodo
 
-    def realizaTeste(self):
+    def realizaTeste(self, tempo = 0):
         pass
