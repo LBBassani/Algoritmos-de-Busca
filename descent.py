@@ -8,7 +8,7 @@ def deepestDescent(problema, estado):
 
     while len(viz) != 0:
         viz = problema.gerarVizinhos(melhorEstado, todaVizinhanca = True)
-        viz = problema.escolheMelhores(melhorEstado, viz)
+        viz = problema.escolheMelhoresDescent(melhorEstado, viz)
         melhorViz = problema.melhorEstado(viz)
         if len(melhorViz) != 0:
             melhorEstado = melhorViz
