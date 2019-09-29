@@ -6,6 +6,28 @@
                Este trabalho consiste em realizar uma comparação experimental entre um conjunto pré-definido de 
                     metaheurísticas aplicadas ao problema da mochila. As metaheurísticas escolhidas são: Hill Climbing, 
                     Beam Search, Simulated Annealing, Genetic Algorithm e GRASP.
+
+    Primeira Prova de Inteligência Artificial
+    Aluna   :   Lorena Bacheti Bassani
+    Tema    :   Algoritmos de Busca
+    Estudos :   Algoritmos de Busca Baseada em soluções parciais, busca local e busca populacional.
+                A matéria estudada é:
+                    Algoritmos de Busca Baseados em soluções parciais
+                        * Hill Climbing
+                        * Beam Search
+                        * Branch and Bound
+                        * A*
+                    Algoritmos de Busca Baseados em soluções completas -> Busca Local
+                        * Simple Descent
+                        * Deepest Descent
+                        * Multistart Descent
+                        * Simulated Annealing
+                        * GRASP
+                        * Tabu Search
+                    Algoritmos de Busca Baseados em soluções completas -> Busca Populacional
+                        * Algoritmo Genético
+                        * Colonia de Formigas
+                        * Enxame de Partículas
 """
 from mochila import mochila
 from hillClimbing import hillClimbing
