@@ -24,9 +24,10 @@ class IProblema:
         raise NotImplementedError
 
     # retorna do nEstados melhores estados na lista de estados
-    def escolheMelhores(self, estados, nEstados):
+    def escolheMelhores(self, estados, nEstados, validosOnly = True):
         valEstados = list(map(lambda x: (self.aptidao(x), estados.index(x)),estados))
-        valEstados = list(filter((lambda x: self.valido(estados[x[1]])),valEstados))
+        if validosOnly:
+            valEstados = list(filter((lambda x: self.valido(estados[x[1]])),valEstados))
         valEstados.sort(reverse = True)
 
         if len(valEstados) > nEstados:
@@ -39,8 +40,8 @@ class IProblema:
         return novosEstados
 
     # retorna o melhor estado
-    def melhorEstado(self, estados):
-        aux = self.escolheMelhores(estados, 1)
+    def melhorEstado(self, estados, validoOnly = True):
+        aux = self.escolheMelhores(estados, 1, validoOnly)
         if aux:
             return aux[0]
     
@@ -124,6 +125,6 @@ class IProblemaGRASP(IProblema):
         self.busca(estado, metodoBusca= metodoBuscaLocal, **keyargs)
 
 class IProblemaDescida(IProblema):
-    def escolheMelhores(self, estado, estados):
+    def escolheMelhoresDescent(self, estado, estados):
         resp = list(filter(lambda x: self.melhorEstado([x, estado] == x), estados))
         return resp

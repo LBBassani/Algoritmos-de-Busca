@@ -2,7 +2,7 @@ import random as r
 import math as m
 import IProblema as interface
 
-class mochila(interface.IProblemaDescida, interface.IProblemaGRASP, interface.IProblemaSimulatedAnnealing, interface.IProblemaGenetico, interface.IProblema):
+class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, interface.IProblemaGRASP, interface.IProblemaSimulatedAnnealing, interface.IProblemaGenetico, interface.IProblema):
 
     def __init__(self, valores, maxTam, metodoBusca = None):
         # valores da mochila: O valor do elemento está em 0 e o volume em 1
@@ -115,7 +115,24 @@ class mochila(interface.IProblemaDescida, interface.IProblemaGRASP, interface.IP
     # retorna o estado considerado nulo no problema
     def estadoNulo(self):
         return [0]*len(self.valores)
-  
+    
+    def estimativa(self, estado, otimista):
+        previsto = estado.copy()
+        melhorValor = (1,0)
+        for i in self.valores:
+            if i[1]/i[0] > melhorValor[1]/melhorValor[0]:
+                melhorValor = i
+        while True:
+            proxEstado = previsto
+            proxEstado[self.valores.index(melhorValor)] = proxEstado[self.valores.index(melhorValor)] + 1
+            if not self.valido(proxEstado):
+                break
+            previsto = proxEstado
+        
+        if otimista:
+            previsto[self.valores.index(melhorValor)] = previsto[self.valores.index(melhorValor)] + 1
+
+        return previsto
 
 """ Testes para a mochila:
     print(m.estadoNulo(), m.estadoAleatorio())
