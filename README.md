@@ -48,3 +48,26 @@ numIter : número de iterações total do algoritmo (critério de parada)
 * maxSemMelhora : número máximo de iterações sem melhora de resposta (critério de parada)
 * chanceCross : chance de ocorrer crossover
 * chanceMutacao : chance de ocorrer mutação
+
+## Primeira Prova de IA
+Além dos algoritmos do primeiro trabalho, a primeira prova de Inteligência Artifical de 2019/02 do curso de Ciência da Computação da UFES cobre os seguintes algoritmos listados abaixo.
+
+### Branch And Bound
+**Classe** : Baseada em Soluções Parciais<br>
+**Descrição** : Algoritmo que, baseado em uma solução previamente conhecida (estado inicial) apenas explora as expansões com chances de gerar resultados melhores que ela. Ao achar uma expansão parcial ainda melhor que o melhor estado atualmente conhecido, pode trocar o estado de referencia para poda.<br>
+Esse algoritmo conta com uma função heurística que realiza uma estimativa do melhor resultado que pode ocorrer em um ramo de expansão. Essa função pode ser:
+* otimista : sempre prevê uma aptidão melhor ou igual a que é na realidade.
+* não otimista : pode prever aptidões piores que a realidade, podando o ramo onde estaria uma solução ótima, mas torna o procedimento mais rápido.
+
+Costuma ser muito complexo gerar funções otimistas para a maioria dos problemas.<br>
+**Necessita de Estado Inicial** : Sim <br>
+**Hiperparametros** :
+* otimista : Define se a função heurística é otimista ou não
+
+
+### Tabu Search
+**Classe** : Baseada em Soluções Completas -> Busca Local<br>
+**Descrição** : Algoritmo de busca local baseado em soluções completas onde movimentos para soluções piores é permitido, de forma que vizinhos dessa soluções possam ser alcançados mais tarde. O algoritmo evita ciclos de busca a partir da lista tabu, onde guarda os estados já vizitados.<br>
+**Necessita de Estado Inicial** : Sim<br>
+**Hiperparametros** : 
+* numIter : numéro de iterações do algoritmo (critério de parada)
