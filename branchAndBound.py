@@ -6,7 +6,6 @@
 """
 
 import IProblema
-from mochila import mochila
 from queue import PriorityQueue
 
 def branch_and_bound(problema, estado, otimista):
