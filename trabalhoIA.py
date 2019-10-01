@@ -3,7 +3,7 @@ para o primeiro trabalho prático de IA
 """
 import IProblema
 import threading
-from simulatedAnnealing import simulatedAnnealing
+from hillClimbing import hillClimbing
 from mochila import mochila
 
 
@@ -33,8 +33,7 @@ class teste:
             raise
 
 m = mochila([(1, 3), (4, 6), (5, 7)], 19)
-parametros = {"t" : 50, "a" : 0.7, "minT" : 1, "numIter" : 50}
-t = teste([m], simulatedAnnealing, **parametros)
+t = teste([m], hillClimbing)
 estado = m.estadoAleatorio()
 tempo = [0.2]
 try:
