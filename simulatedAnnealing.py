@@ -12,40 +12,46 @@ import threading
 from time import time
 import random
 
-def simulatedAnnealing(problema, estado, t, a, minT, numIter, tempo = 0):
+def simulatedAnnealing(problema, estado, t, a, minT, numIter, tempo = list()):
 
     # Rotina de tempo limite
-    def saida(encerrou):
-        if tempo > 0:
-            encerrou.clear()
-            encerrou.append([True])
-
     encerrou = list()
     encerrou.append([False])
+
+    if tempo:
+        
+        def saida(encerrou):
+        
+                encerrou.clear()
+                encerrou.extend([True])
+
+        t = threading.Timer(tempo[0]*60, saida, encerrou)
+        t.start()
+    
     inicio = time()
-    print(inicio)
-
-    t = threading.Timer(tempo*60, saida, encerrou)
-    t.start()
-
     melhorEstado = estado.copy()
     aux = estado.copy()
 
-    # while t > minT:
-    while True:
-        if encerrou[0][0]:
-            print("encerrou")
-            print(encerrou)
-            break
-        _ = problema.gerarVizinhos(aux, todaVizinhanca = True)
-
-    estado.clear()
-    estado.extend(melhorEstado)
-    final = time()
-    print(final)
-    t.join()
-    print("retornando")
-    return final - inicio
+    try:
+        # while t > minT:
+        while True:
+            if encerrou[0][0]:
+                raise IProblema.TimedOutExc
+            _ = problema.gerarVizinhos(aux, todaVizinhanca = True)
+    except IProblema.TimedOutExc:
+        print("Terminou por Timeout")
+        raise
+    else:
+        if tempo:
+            t.cancel()
+    finally:
+        estado.clear()
+        estado.extend(melhorEstado)
+        final = time()
+        if tempo: 
+            t.join()
+            tempo.clear()        
+        tempo.append(final - inicio)
 
 """        viz = problema.gerarVizinhos(aux, todaVizinhanca = True)
          for _ in range(1, numIter):
