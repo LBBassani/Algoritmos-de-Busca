@@ -42,7 +42,7 @@ parametrosTreinamento = {
     "Beam Search" : {"nEstados" : [10, 25, 50, 100]},
     "Simulated Annealing" : {"t" : [50, 90, 100, 250, 500], "a" : [0.7, 0.85, 0.9, 0.95, 0.97, 0.99], "minT" : [1], "numIter" : [50, 100, 200, 350, 500]},
     "Algoritmo Genético" : {"maxIter" :  [50, 100, 200, 350, 500], "tamanhoPop" : [10, 20, 30], "maxSemMelhora" : [15], "chanceCross" : [0.75, 0.85, 0.95], "chanceMutacao" : [0.1, 0.2, 0.3]},
-    "GRASP" : {"m" : [2, 5, 10, 15], "numIter" : [50, 100, 200, 350, 500], "metodoBuscaLocal" : [deepestDescent, None]},
+    "GRASP" : {"m" : [2, 5, 10, 15], "numIter" : [50, 100, 200, 350, 500], "metodoBuscaLocal" : [deepestDescent, {}]},
 }
 
 """ Testes dos algoritmos """
@@ -83,20 +83,20 @@ problemasTreino = {
 }
 
 # algoritmos a serem treinados
-treinamentos = {
+""" treinamentos = {
     "Algoritmo Genético" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametrosTreinamento["Algoritmo Genético"]),
     "Simulated Anneling" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametrosTreinamento["Simulated Anneling"]),
     "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametrosTreinamento["Beam Search"]),
     "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametrosTreinamento["GRASP"])
-}
+} """
 
 # resultados dos treinamentos
-resultadosTreinamentos = {
+""" resultadosTreinamentos = {
     "Algoritmo Genético" : treinamentos["Algoritmo Genético"].treino(2),
     "Simulated Anneling" : treinamentos["Simulated Annealing"].treino(2),
     "Beam Search" : treinamentos["Beam Search"].treino(2),
     "GRASP" : treinamentos["GRASP"].treino(2)
-}
+} """
 
 # problemas de Teste de acordo com apendice A do enunciado do primeiro trabalho de IA
 problemasTeste = {
@@ -113,10 +113,10 @@ problemasTeste = {
 }
 
 # resultados dos testes
-resultadosTestes = {
+""" resultadosTestes = {
     "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing).realizaTeste(5),
     "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch).realizaTeste(5),
     "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing).realizaTeste(5),
     "GRASP" : trabalhoIA.teste(problemasTeste, grasp).realizaTeste(5),
     "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico).realizaTeste(5)
-}
+} """

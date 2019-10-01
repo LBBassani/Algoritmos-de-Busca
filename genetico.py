@@ -11,8 +11,27 @@
 """
 import IProblema
 import random
+import threading
+from time import time
 
-def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chanceCross, chanceMutacao):
+def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chanceCross, chanceMutacao, tempo = list()):
+
+    # Rotina de tempo limite
+    encerrou = list()
+    encerrou.append([False])
+
+    if tempo:
+        
+        def saida(encerrou):
+        
+                encerrou.clear()
+                encerrou.extend([True])
+
+        temporizador = threading.Timer(tempo[0]*60, saida, encerrou)
+        temporizador.start()
+    
+    inicio = time()
+
     # FIXME Resultados completamente aletatórios e péssimos
     def ocorreEvento(chance):
         n = random.random()
@@ -27,38 +46,52 @@ def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chan
     melhorAptidaoAtual = 0
     geracoesSemMelhora = 0
     iterador = 0
+    try:
+        while iterador < maxIter and geracoesSemMelhora < maxSemMelhora:
+            if encerrou[0][0]:
+                raise IProblema.TimedOutExc
 
-    while iterador < maxIter and geracoesSemMelhora < maxSemMelhora:
-        # seleciona os melhores e gera nova população
-        problema.selecao(populacao)
-        problema.gerarPopulacao(populacao, tamanhoPop)
-        
-        # realiza um número aleatório de crossovers e mutações entre 0 e 5
-        for _ in range(1, random.randint(2, 5)):
-            # verifica se ocorre Crossover
-            if ocorreEvento(chanceCross):
-                n = 0
-                k = 0
-                while n == k:
-                    n = random.randint(0, len(populacao) - 1)
-                    k = random.randint(0, len(populacao) - 1)
-                problema.crossover(populacao[n], populacao[k])
-
-            # verifica se ocorre mutação
-            if ocorreEvento(chanceMutacao):
-                n = random.randint(0, len(populacao) - 1)
-                problema.mutacao(populacao[n])
-
-        # testa se houve melhora em comparação ao melhor estado conhecido
-        if(melhorAptidaoAtual > problema.aptidao(problema.melhorDaGeracao(populacao))):
-            geracoesSemMelhora = geracoesSemMelhora + 1
-
-        else:
-            melhor = problema.melhorDaGeracao(populacao)
-            melhorAptidaoAtual = problema.aptidao(problema.melhorDaGeracao(populacao))
-            geracoesSemMelhora = 0
+            # seleciona os melhores e gera nova população
+            problema.selecao(populacao)
+            problema.gerarPopulacao(populacao, tamanhoPop)
             
-        iterador = iterador + 1
+            # realiza um número aleatório de crossovers e mutações entre 0 e 5
+            for _ in range(1, random.randint(2, 5)):
+                # verifica se ocorre Crossover
+                if ocorreEvento(chanceCross):
+                    n = 0
+                    k = 0
+                    while n == k:
+                        n = random.randint(0, len(populacao) - 1)
+                        k = random.randint(0, len(populacao) - 1)
+                    problema.crossover(populacao[n], populacao[k])
 
-    estado.clear()
-    estado.extend(melhor)
+                # verifica se ocorre mutação
+                if ocorreEvento(chanceMutacao):
+                    n = random.randint(0, len(populacao) - 1)
+                    problema.mutacao(populacao[n])
+
+            # testa se houve melhora em comparação ao melhor estado conhecido
+            if(melhorAptidaoAtual > problema.aptidao(problema.melhorDaGeracao(populacao))):
+                geracoesSemMelhora = geracoesSemMelhora + 1
+
+            else:
+                melhor = problema.melhorDaGeracao(populacao)
+                melhorAptidaoAtual = problema.aptidao(problema.melhorDaGeracao(populacao))
+                geracoesSemMelhora = 0
+                
+            iterador = iterador + 1
+
+    except IProblema.TimedOutExc:
+        raise
+    else:
+        if tempo:
+            temporizador.cancel()
+    finally:
+        estado.clear()
+        estado.extend(melhor)
+        final = time()
+        if tempo: 
+            temporizador.join()
+            tempo.clear()        
+        tempo.append(final - inicio)

@@ -1,4 +1,4 @@
-import Iproblema
+import IProblema
 import random as r
 import math as m
 
