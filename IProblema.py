@@ -1,6 +1,9 @@
 import random as r
 import math as m
 
+class TimedOutExc(Exception):
+    pass
+
 class IProblema:
 
     # retorna a aptidão atual de um estado
