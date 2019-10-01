@@ -30,7 +30,6 @@ class teste:
         try:
             self.metodo(self.problemas[0], estado, **self.parametros, tempo = tempo) 
         except IProblema.TimedOutExc:
-            print("Terminou por Timeout")
             raise
 
 m = mochila([(1, 3), (4, 6), (5, 7)], 19)

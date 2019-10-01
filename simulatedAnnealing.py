@@ -48,7 +48,6 @@ def simulatedAnnealing(problema, estado, t, a, minT, numIter, tempo = list()):
                         melhorEstado = aux
             t = t*a
     except IProblema.TimedOutExc:
-        print("Terminou por Timeout")
         raise
     else:
         if tempo:
