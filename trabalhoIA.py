@@ -3,7 +3,7 @@ para o primeiro trabalho prático de IA
 """
 import IProblema
 import threading
-from hillClimbing import hillClimbing
+from genetico import algoritmoGenetico as genetico
 from mochila import mochila
 
 
@@ -16,7 +16,10 @@ class treinamento:
     
     
     def treino(self, tempo = 0):
-        pass
+        try:
+            pass 
+        except IProblema.TimedOutExc:
+            raise
         
 
 class teste:
@@ -28,18 +31,6 @@ class teste:
 
     def realizaTeste(self, estado, tempo = list()):
         try:
-            self.metodo(self.problemas[0], estado, **self.parametros, tempo = tempo) 
+            pass 
         except IProblema.TimedOutExc:
             raise
-
-m = mochila([(1, 3), (4, 6), (5, 7)], 19)
-t = teste([m], hillClimbing)
-estado = m.estadoAleatorio()
-tempo = [0.2]
-try:
-    t.realizaTeste(estado, tempo = tempo)
-except IProblema.TimedOutExc:
-    print("Terminou por Timeout")
-finally:
-    print("Estado:", estado)
-    print("Tempo:", tempo[0])
