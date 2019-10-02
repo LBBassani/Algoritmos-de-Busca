@@ -37,13 +37,13 @@ class treinamento:
         except IProblema.TimedOutExc:
             raise
 
-       
+
 """ Classe de Teste
         Atributos :
             problemas   : Dicionário de problemas a serem utilizados para o teste do método
             metodo      : Método a ser testado
             parametros  : dicionário com listas de parâmetros a serem testados
-            resposta    : objeto contendo as respostas do teste após realizado (None antes de treinar)
+            resposta    : objeto contendo as respostas do teste após realizado (None antes de testar)
 
         Métodos :
             realizaTreino
@@ -56,7 +56,6 @@ class treinamento:
                     IProblema.TimedOutExec  : Exceção de tempo limite
                     NotImplementedError     : Erro de método não implementado por subclasse de IProblema
 """
-
 class teste:
 
     def __init__(self, problemas, metodo, **keyargs):
