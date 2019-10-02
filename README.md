@@ -2,7 +2,46 @@
 Este trabalho é dedicado a algoritmos de busca estudados em Inteligência Artificial. Alguns algoritmos foram implementados com finalidade de estudos para a primeira prova e alguns para o primeiro trabalho prático da matéria de Inteligência Artificial no semestre de 2019/02, pela Aluna Lorena Bassani do curso de Ciência da Computação da Universidade Federal do Espírito Santo - UFES.
 
 ## Primeiro Trabalho de IA
-O primeiro trabalho prático de Inteligência Artificial se dedica a encontrar hiperparâmetros e testar cinco métodos de busca aplicados ao problema da mochila. Abaixo estão listados os métodos implementados para o trabalho:
+O primeiro trabalho prático de Inteligência Artificial se dedica a encontrar hiperparâmetros e testar cinco métodos de busca aplicados ao problema da mochila. Abaixo estão listados os métodos implementados para o trabalho e as classes de Teste e Treinamento:
+
+### Classe de Treinamento
+#### Atributos :
+**problemas**   : Dicionário de problemas a serem utilizados para o treinamento do método<br>
+**metodo**      : Método a ser treinado<br>
+**parametros**  : dicionário com listas de parâmetros a serem testados<br>
+**resposta**    : objeto contendo as respostas do treinamento após realizado (None antes de treinar)<br>
+
+#### Métodos :
+##### realizaTreino
+**Descrição** : Método de treinamento de algoritmos que, com base nos parametros passados na construção da classe, realiza uma busca em grade dos parametros com melhor
+desempenho nos casos de treinamento.<br>
+**Parametros** : Sim<br>
+- tempo    : tempo limite de execução de cada tentativa de rodar um problema.<br>
+
+**Retorno**    : Não<br>
+**Lança exceções** : Sim<br>
+- IProblema.TimedOutExec  : Exceção de tempo limite
+- NotImplementedError     : Erro de método não implementado por subclasse de IProblema
+
+### Classe de Teste
+#### Atributos :
+**problemas**   : Dicionário de problemas a serem utilizados para o teste do método<br>
+**metodo** : Método a ser testado<br>
+**parametros**  : dicionário com listas de parâmetros a serem testados<br>
+**resposta**    : objeto contendo as respostas do teste após realizado (None antes de testar)
+
+#### Métodos :
+##### realizaTreino
+**Descrição** : Método de teste de algoritmos que, com base nos parametros passados 
+na construção da classe, avalia o desempenho do método nos casos de teste.<br>
+**Parametros** : Sim<br>
+- tempo    : tempo limite de execução de cada tentativa de rodar um problema
+
+**Retorno**    : Não<br>
+**Lança exceções** : Sim<br>
+- IProblema.TimedOutExec  : Exceção de tempo limite
+- NotImplementedError     : Erro de método não implementado por subclasse de IProblema
+
 
 ### Hill Climbing
 **Classe** : Baseada em Soluções Parciais<br>
