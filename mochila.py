@@ -85,20 +85,30 @@ class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, int
 
     # função de seleção por roleta (mantem um sobrevivente na população)
     def selecao(self, estados):
-        soma = 0
-        for i in range(0, len(estados)):
-            soma = soma + self.valorAtual(estados[i])
-        n = r.randint(0, soma)
-        i = 0
-        while n > 0:
-            if i == len(estados) - 1:
-                break
-            n - self.valorAtual(estados[i])
-            i = i + 1
-        sobrevivente = estados[i]
-        estados = []
-        estados.append(sobrevivente)
-        return estados
+        """ primeiro passo : definir as faixas de sobrevivência
+                Como :  calcular as probabilidades de cada um sobreviver (aptidao/sum(aptidoes))
+                        calcular a faixa de sobrevivência
+        """
+        total = sum(list(map(lambda x: self.aptidao(x), estados)))
+        porcentagens = list(map(lambda x: (x, self.aptidao(x)/total),estados))
+
+        faixaSobrevivencia = list()
+        limiteInf = 0
+        for e in porcentagens:
+            faixaSobrevivencia.append((limiteInf, limiteInf + e[1], e[0]))
+            limiteInf = limiteInf + e[1]
+        print(faixaSobrevivencia)
+        
+        """ segundo passo : escolher o sobrevivente 
+                Como :  gerar um número aleatório
+                        descobrir em qual faixa de sobrevivência ele se encontra
+        """
+        n = r.uniform(0,1)
+        for e in faixaSobrevivencia:
+            if n >= e[0] and n < e[1]:
+                estados.clear()
+                estados.append(e[2])
+        
 
     # gera uma população a partir do primeiro individuo da população dada
     def gerarPopulacao(self, populacao, tamanhoPop):
