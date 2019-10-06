@@ -74,18 +74,22 @@ class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, int
         # numero de crossovers
         i = r.randint(0, len(estado1) - 1)
         for _ in range(0, i):
+            # posições de crossover
             k = r.randint(0, len(estado1) - 1)
-            j = r.randint(0, len(estado1) - 1)
+            j = r.randint(0, len(estado2) - 1)
             aux = estado1[k]
             estado1[k] = estado2[j]
             estado2[j] = aux
 
     # função de mutação (aleatoriamente muda uma parte do estado)
     def mutacao(self, estado):
-        i = r.randint(0, len(estado) - 1)
-        q = -1 + 2*r.randint(0, 1)
-        if estado[i] + q >= 0:
-            estado[i] = estado[i] + q
+        # numero de mutações (máximo 20)
+        i = r.randint(0, ((len(estado) - 1) % 21))
+        for _ in range(0, i):
+            q = -1 + 2*r.randint(0, 1)
+            k = r.randint(0, len(estado) - 1)
+            if estado[k] + q >= 0:
+                estado[k] = estado[k] + q
 
     # função de seleção por roleta (mantem um sobrevivente na população)
     def selecao(self, estados):
