@@ -32,7 +32,6 @@ def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chan
     
     inicio = time()
 
-    # FIXME Resultados completamente aletatórios e péssimos
     def ocorreEvento(chance):
         n = random.random()
         if n <= chance:
