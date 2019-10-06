@@ -97,7 +97,6 @@ class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, int
         for e in porcentagens:
             faixaSobrevivencia.append((limiteInf, limiteInf + e[1], e[0]))
             limiteInf = limiteInf + e[1]
-        print(faixaSobrevivencia)
         
         """ segundo passo : escolher o sobrevivente 
                 Como :  gerar um número aleatório
