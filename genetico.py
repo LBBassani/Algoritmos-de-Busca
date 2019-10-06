@@ -13,7 +13,6 @@ import IProblema
 import random
 import threading
 from time import time
-from mochila import mochila
 
 def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chanceCross, chanceMutacao, tempo = list()):
 
@@ -96,9 +95,3 @@ def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chan
             temporizador.join()
             tempo.clear()        
         tempo.append(final - inicio)
-
-m1 =  mochila([(1, 3), (4, 6), (5, 7)], 19)
-argumentos = {"maxIter" : 1000, "tamanhoPop" : 10, "maxSemMelhora" : 100, "chanceCross" : 0.15, "chanceMutacao" : 0.1}
-estado = [0,0,0]
-m1.busca(estado, metodoBusca= algoritmoGenetico, **argumentos)
-print(estado, m1.valorAtual(estado), m1.tamanhoAtual(estado))
