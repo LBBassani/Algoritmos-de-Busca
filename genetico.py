@@ -56,7 +56,7 @@ def algoritmoGenetico(problema, estado, maxIter, tamanhoPop, maxSemMelhora, chan
             problema.gerarPopulacao(populacao, tamanhoPop)
             
             # realiza um número aleatório de crossovers e mutações entre 0 e 5
-            for _ in range(1, random.randint(2, 5)):
+            for _ in range(1, random.randint(2, 20)):
                 # verifica se ocorre Crossover
                 if ocorreEvento(chanceCross):
                     n = 0
