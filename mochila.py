@@ -71,10 +71,14 @@ class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, int
 
     # função de crossover em ponto único (troca de partes entre estados)
     def crossover(self, estado1, estado2):
+        # numero de crossovers
         i = r.randint(0, len(estado1) - 1)
-        aux = estado1[i]
-        estado1[i] = estado2[i]
-        estado2[i] = aux
+        for _ in range(0, i):
+            k = r.randint(0, len(estado1) - 1)
+            j = r.randint(0, len(estado1) - 1)
+            aux = estado1[k]
+            estado1[k] = estado2[j]
+            estado2[j] = aux
 
     # função de mutação (aleatoriamente muda uma parte do estado)
     def mutacao(self, estado):
@@ -118,8 +122,9 @@ class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, int
                 if i >= acrescer:
                     break
                 novoEstado = estado.copy()
-                novoEstado[i] = novoEstado[i] + 1
-                populacao.append(novoEstado)
+                novoEstado[i] = novoEstado[i] + -1 + 2*r.randint(0, 1)
+                if novoEstado[i] > 0:
+                    populacao.append(novoEstado)
 
     # retorna o estado considerado nulo no problema
     def estadoNulo(self):
