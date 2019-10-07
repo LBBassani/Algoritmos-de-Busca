@@ -58,7 +58,7 @@ class IProblema:
         if metodoBusca is None:
             raise NotImplementedError
         if keyargs:
-            metodoBusca(self, estado, tempo, **keyargs)
+            metodoBusca(self, estado, tempo = tempo, **keyargs)
         else:
             metodoBusca(self, estado, tempo)
 
