@@ -29,7 +29,7 @@ class treinamento:
         self.problemas = problemas
         self.metodo = metodo
         self.parametros = keyargs
-        self.resposta = None
+        self.resposta = list()
     
     
     def realizaTreino(self, tempo = [2]):
@@ -57,13 +57,15 @@ class treinamento:
                 tempo.append(timeout)
                 # Realiza a busca
                 try:
-                    p.busca(estado, self.metodo, tempo, paramList)
+                    p.busca(estado, self.metodo, tempo, **paramList)
                 except IProblema.TimedOutExc:
                     # Se veio com timeout, muda a flag de termino para False
                     terminou = False
-                # Formata a resposta 
-                resultados.extend({"Tempo" : tempo[0], "Resposta" : estado.copy(), "Parametros" : paramList, "Terminou" : terminou})
-            self.resposta.extend({"Problema" : (nome, p.descricao()), "Resultados" : resultados})   
+                # Formata a resposta
+                resp = {"Tempo" : tempo[0], "Resposta" : estado.copy(), "Parametros" : paramList, "Terminou" : terminou}
+                resultados.append(resp)
+            resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultados}
+            self.resposta.append(resp)   
 
 
 
