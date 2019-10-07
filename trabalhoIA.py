@@ -4,6 +4,7 @@ para o primeiro trabalho prático de IA
 import IProblema
 from sklearn.model_selection import ParameterGrid
 
+
 """ Classe de Treinameto
         Atributos :
             problemas   : Dicionário de problemas a serem utilizados para o treinamento do método
@@ -66,7 +67,6 @@ class treinamento:
                 resultados.append(resp)
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultados}
             self.resposta.append(resp)   
-
 
 
 """ Classe de Teste
