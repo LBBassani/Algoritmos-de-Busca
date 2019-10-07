@@ -10,7 +10,8 @@ from sklearn.model_selection import ParameterGrid
             problemas   : Dicionário de problemas a serem utilizados para o treinamento do método
             metodo      : Método a ser treinado
             parametros  : dicionário com listas de parâmetros a serem testados
-            resposta    : objeto contendo as respostas do treinamento após realizado (None antes de treinar)
+            respostaProblema : objeto contendo as respostas por problema do treinamento após realizado (lista vazia antes de treinar)
+            respostaParametros : objeto contendo as respostas por parametro do treinamento após realizado (lista vazia antes de normalizar os resultados)
 
         Métodos :
             realizaTreino
@@ -29,15 +30,16 @@ class treinamento:
     def __init__(self, problemas, metodo, **keyargs ):
         self.problemas = problemas
         self.metodo = metodo
-        self.parametros = keyargs
-        self.resposta = list()
+        self.parametros = ParameterGrid(keyargs)
+        self.respostaProblema = list()
+        self.respostaParametros = list()
     
     
     def realizaTreino(self, tempo = [2]):
         """ primeiro passo : criar grade de parametros 
                 Como : Usando ParameterGrid do Scikit-learn
         """
-        parameterGrid = ParameterGrid(self.parametros)
+        
         if tempo:
             timeout = tempo[0]
         else:
@@ -50,7 +52,7 @@ class treinamento:
         """
         for nome, p in self.problemas.items():
             resultados = list()
-            for paramList in parameterGrid:
+            for paramList in self.parametros:
                 # prepara as variáveis para o problema
                 terminou = True
                 estado = p.estadoNulo()
@@ -66,15 +68,37 @@ class treinamento:
                 resp = {"Tempo" : tempo[0], "Resposta" : estado.copy(), "Parametros" : paramList, "Terminou" : terminou}
                 resultados.append(resp)
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultados}
-            self.resposta.append(resp)   
+            self.respostaProblema.append(resp)  
 
+    def resultadosPorParametros(self):
+        """ Montar os resultados por parametros """
+        pass
+
+    def resultadosNormalizados(self):
+        """ Normalizar os resultados por problema do conjunto de treino """
+       
+        pass
+
+    def melhoresParametros(self):
+        """ Encontrar o melhor resultado """
+        pass
+
+    def temposAlcancados(self):
+        """ Retornar os tempos """
+        tempos = list()
+        for resp in self.respostaProblema:
+            resultado = resp["Resultados"]
+            for r in resultado:
+                tempo = r["Tempo"]
+                tempos.append(tempo)
+        return tempos
 
 """ Classe de Teste
         Atributos :
             problemas   : Dicionário de problemas a serem utilizados para o teste do método
             metodo      : Método a ser testado
             parametros  : dicionário com listas de parâmetros a serem testados
-            resposta    : objeto contendo as respostas do teste após realizado (None antes de testar)
+            resposta    : objeto contendo as respostas do teste após realizado (none antes de testar)
 
         Métodos :
             realizaTreino
