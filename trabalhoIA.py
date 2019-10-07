@@ -2,6 +2,7 @@
 para o primeiro trabalho prático de IA 
 """
 import IProblema
+from sklearn.model_selection import ParameterGrid
 
 """ Classe de Treinameto
         Atributos :
@@ -31,11 +32,39 @@ class treinamento:
         self.resposta = None
     
     
-    def realizaTreino(self, tempo = list()):
-        try:
-            pass 
-        except IProblema.TimedOutExc:
-            raise
+    def realizaTreino(self, tempo = [2]):
+        """ primeiro passo : criar grade de parametros 
+                Como : Usando ParameterGrid do Scikit-learn
+        """
+        parameterGrid = ParameterGrid(self.parametros)
+        if tempo:
+            timeout = tempo[0]
+        else:
+            timeout = 2 # Tempo de timeout default de 2 minutos
+        
+        """ segundo passo : Rodar os testes 
+                Como :  Para cada problema a ser usado para treino roda o algoritmo
+                            para cada combinação de parametros vindos da grid de parametros.
+                        Guarda o resultado de tempo, resposta e lista de parametros
+        """
+        for nome, p in self.problemas.items():
+            resultados = list()
+            for paramList in parameterGrid:
+                # prepara as variáveis para o problema
+                terminou = True
+                estado = p.estadoNulo()
+                tempo.clear()
+                tempo.append(timeout)
+                # Realiza a busca
+                try:
+                    p.busca(estado, self.metodo, tempo, paramList)
+                except IProblema.TimedOutExc:
+                    # Se veio com timeout, muda a flag de termino para False
+                    terminou = False
+                # Formata a resposta 
+                resultados.extend({"Tempo" : tempo[0], "Resposta" : estado.copy(), "Parametros" : paramList, "Terminou" : terminou})
+            self.resposta.extend({"Problema" : (nome, p.descricao()), "Resultados" : resultados})   
+
 
 
 """ Classe de Teste
