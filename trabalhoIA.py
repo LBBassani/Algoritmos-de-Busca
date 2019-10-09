@@ -49,8 +49,8 @@ class treinamento:
                             para cada combinação de parametros vindos da grid de parametros.
                         Guarda o resultado de tempo, resposta e lista de parametros
         """
+        self.respostaProblema = list()
         for nome, p in self.problemas.items():
-            self.respostaProblema = list()
             resultados = list()
             for paramList in self.parametros:
                 # prepara as variáveis para o problema
@@ -73,7 +73,14 @@ class treinamento:
     def resultadosPorParametros(self):
         """ Montar os resultados por parametros """
         self.respostaParametros = list()
-        pass
+        for param in self.parametros:
+            lista = list()
+            for resposta in self.respostaProblemaNormal:
+                resposta = resposta["Resultados"]
+                resposta = list(filter(lambda x: x["Parametros"] == param, resposta))
+                lista.append(resposta[0]["Resposta"])
+            self.respostaParametros.append({"Parametros" : param, "Resultados" : lista})
+
 
     def resultadosNormalizados(self):
         """ Normalizar os resultados por problema do conjunto de treino """
