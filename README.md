@@ -9,8 +9,9 @@ O primeiro trabalho prático de Inteligência Artificial se dedica a encontrar h
 **problemas**   : Dicionário de problemas a serem utilizados para o treinamento do método<br>
 **metodo**      : Método a ser treinado<br>
 **parametros**  : dicionário com listas de parâmetros a serem testados<br>
-**resposta**    : objeto contendo as respostas do treinamento após realizado (None antes de treinar)<br>
-
+**respostaProblema** : objeto contendo as respostas por problema do treinamento após realizado (não existe antes de treinar)<br>
+**respostaParametros** : objeto contendo as respostas por parametro do treinamento após realizado (não existe antes de normalizar os resultados)<br>
+**respostaProblemaNormal** : objeto contendo as respostas normalizadas por problema do treinamento após realizado (não existe antes de normalizar os resultados)
 #### Métodos :
 ##### realizaTreino
 **Descrição** : Método de treinamento de algoritmos que, com base nos parametros passados na construção da classe, realiza uma busca em grade dos parametros com melhor

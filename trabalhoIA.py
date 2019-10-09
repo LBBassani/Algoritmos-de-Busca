@@ -10,8 +10,9 @@ from sklearn.model_selection import ParameterGrid
             problemas   : Dicionário de problemas a serem utilizados para o treinamento do método
             metodo      : Método a ser treinado
             parametros  : dicionário com listas de parâmetros a serem testados
-            respostaProblema : objeto contendo as respostas por problema do treinamento após realizado (lista vazia antes de treinar)
-            respostaParametros : objeto contendo as respostas por parametro do treinamento após realizado (lista vazia antes de normalizar os resultados)
+            respostaProblema : objeto contendo as respostas por problema do treinamento após realizado (não existe antes de treinar)
+            respostaParametros : objeto contendo as respostas por parametro do treinamento após realizado (não existe antes de normalizar os resultados)
+            respostaProblemaNormal : objeto contendo as respostas normalizadas por problema do treinamento após realizado (não existe antes de normalizar os resultados)
 
         Métodos :
             realizaTreino
@@ -31,8 +32,6 @@ class treinamento:
         self.problemas = problemas
         self.metodo = metodo
         self.parametros = ParameterGrid(keyargs)
-        self.respostaProblema = list()
-        self.respostaParametros = list()
     
     
     def realizaTreino(self, tempo = [2]):
@@ -51,6 +50,7 @@ class treinamento:
                         Guarda o resultado de tempo, resposta e lista de parametros
         """
         for nome, p in self.problemas.items():
+            self.respostaProblema = list()
             resultados = list()
             for paramList in self.parametros:
                 # prepara as variáveis para o problema
@@ -65,19 +65,44 @@ class treinamento:
                     # Se veio com timeout, muda a flag de termino para False
                     terminou = False
                 # Formata a resposta
-                resp = {"Tempo" : tempo[0], "Resposta" : estado.copy(), "Parametros" : paramList, "Terminou" : terminou}
+                resp = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Parametros" : paramList, "Terminou" : terminou}
                 resultados.append(resp)
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultados}
             self.respostaProblema.append(resp)  
 
     def resultadosPorParametros(self):
         """ Montar os resultados por parametros """
+        self.respostaParametros = list()
         pass
 
     def resultadosNormalizados(self):
         """ Normalizar os resultados por problema do conjunto de treino """
-       
-        pass
+        self.respostaProblemaNormal = self.respostaProblema.copy()
+        mini, maxi = self.minMaxValueResultadosPorProblema()
+        divisor = maxi - mini
+        for r in self.respostaProblemaNormal:
+            resultados = r["Resultados"]
+            for resultado in resultados:
+                resp = resultado["Resposta"]
+                resp[1] = (resp[1] - mini)/divisor
+
+
+    def mediaResultadosPorProblema(self):
+        aux = self.aptidoesResultados()
+        media = sum(aux)
+        media = media/(len(self.respostaProblema)*len(self.problemas))
+        return media
+    
+    def minMaxValueResultadosPorProblema(self):
+        aux = self.aptidoesResultados()
+        return (min(aux), max(aux))
+
+    def aptidoesResultados(self):
+        aux = list(map(lambda x: x["Resultados"], self.respostaProblema))
+        aux = [item for sublist in aux for item in sublist]
+        aux = list(map(lambda x : x["Resposta"], aux))
+        aux = list(map(lambda x: x[1], aux))
+        return aux
 
     def melhoresParametros(self):
         """ Encontrar o melhor resultado """
