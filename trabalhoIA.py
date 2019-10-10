@@ -68,7 +68,10 @@ class treinamento:
                 resp = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Parametros" : paramList, "Terminou" : terminou}
                 resultados.append(resp)
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultados}
-            self.respostaProblema.append(resp)  
+            self.respostaProblema.append(resp)
+        self.resultadosNormalizados()
+        self.resultadosPorParametros()
+        return (self.melhoresParametros(), self.respostaProblema, self.temposAlcancados())
 
     def resultadosPorParametros(self):
         """ Montar os resultados por parametros """
@@ -81,7 +84,6 @@ class treinamento:
                 lista.append(resposta[0]["Resposta"])
             self.respostaParametros.append({"Parametros" : param, "Resultados" : lista})
 
-
     def resultadosNormalizados(self):
         """ Normalizar os resultados por problema do conjunto de treino """
         self.respostaProblemaNormal = self.respostaProblema.copy()
@@ -93,11 +95,11 @@ class treinamento:
                 resp = resultado["Resposta"]
                 resp[1] = (resp[1] - mini)/divisor
 
-
-    def mediaResultadosPorProblema(self):
-        aux = self.aptidoesResultados()
+    def mediaResultadosPorParametros(self, p):
+        aux = p["Resultados"]
+        aux = list(map(lambda x: x[1], aux))
         media = sum(aux)
-        media = media/(len(self.respostaProblema)*len(self.problemas))
+        media = media/(len(p["Resultados"]))
         return media
     
     def minMaxValueResultadosPorProblema(self):
@@ -113,7 +115,14 @@ class treinamento:
 
     def melhoresParametros(self):
         """ Encontrar o melhor resultado """
-        pass
+        melhorMedia = 0
+        melhorParam = None
+        for p in self.respostaParametros:
+            m = self.mediaResultadosPorParametros(p)
+            if m > melhorMedia:
+                melhorMedia = m
+                melhorParam = p
+        return (melhorMedia, melhorParam["Parametros"])
 
     def temposAlcancados(self):
         """ Retornar os tempos """
