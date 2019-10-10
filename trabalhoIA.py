@@ -2,32 +2,163 @@
 para o primeiro trabalho prático de IA 
 """
 import IProblema
-import threading
-from genetico import algoritmoGenetico as genetico
-from mochila import mochila
+from sklearn.model_selection import ParameterGrid
 
 
+""" Classe de Treinameto
+        Atributos :
+            problemas   : Dicionário de problemas a serem utilizados para o treinamento do método
+            metodo      : Método a ser treinado
+            parametros  : dicionário com listas de parâmetros a serem testados
+            respostaProblema : objeto contendo as respostas por problema do treinamento após realizado (não existe antes de treinar)
+            respostaParametros : objeto contendo as respostas por parametro do treinamento após realizado (não existe antes de normalizar os resultados)
+            respostaProblemaNormal : objeto contendo as respostas normalizadas por problema do treinamento após realizado (não existe antes de normalizar os resultados)
+
+        Métodos :
+            realizaTreino
+                Descrição : Método de treinamento de algoritmos que, com base nos parametros passados 
+                            na construção da classe, realiza uma busca em grade dos parametros com melhor
+                            desempenho nos casos de treinamento.
+                Parametros : Sim
+                    tempo    : tempo limite de execução de cada tentativa de rodar um problema
+                Retorno    : Não
+                Lança exceções : Sim
+                    IProblema.TimedOutExec  : Exceção de tempo limite
+                    NotImplementedError     : Erro de método não implementado por subclasse de IProblema
+"""
 class treinamento:
 
     def __init__(self, problemas, metodo, **keyargs ):
-        self.problema = problemas
+        self.problemas = problemas
         self.metodo = metodo
-        self.parametros = keyargs
+        self.parametros = ParameterGrid(keyargs)
     
     
-    def treino(self, tempo = 0):
-        try:
-            pass 
-        except IProblema.TimedOutExc:
-            raise
+    def realizaTreino(self, tempo = [2]):
+        """ primeiro passo : criar grade de parametros 
+                Como : Usando ParameterGrid do Scikit-learn
+        """
         
+        if tempo:
+            timeout = tempo[0]
+        else:
+            timeout = 2 # Tempo de timeout default de 2 minutos
+        
+        """ segundo passo : Rodar os testes 
+                Como :  Para cada problema a ser usado para treino roda o algoritmo
+                            para cada combinação de parametros vindos da grid de parametros.
+                        Guarda o resultado de tempo, resposta e lista de parametros
+        """
+        self.respostaProblema = list()
+        for nome, p in self.problemas.items():
+            resultados = list()
+            for paramList in self.parametros:
+                # prepara as variáveis para o problema
+                terminou = True
+                estado = p.estadoNulo()
+                tempo.clear()
+                tempo.append(timeout)
+                # Realiza a busca
+                try:
+                    p.busca(estado, self.metodo, tempo, **paramList)
+                except IProblema.TimedOutExc:
+                    # Se veio com timeout, muda a flag de termino para False
+                    terminou = False
+                # Formata a resposta
+                resp = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Parametros" : paramList, "Terminou" : terminou}
+                resultados.append(resp)
+            resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultados}
+            self.respostaProblema.append(resp)
+        self.resultadosNormalizados()
+        self.resultadosPorParametros()
+        return (self.melhoresParametros(), self.respostaProblema, self.temposAlcancados())
 
+    def resultadosPorParametros(self):
+        """ Montar os resultados por parametros """
+        self.respostaParametros = list()
+        for param in self.parametros:
+            lista = list()
+            for resposta in self.respostaProblemaNormal:
+                resposta = resposta["Resultados"]
+                resposta = list(filter(lambda x: x["Parametros"] == param, resposta))
+                lista.append(resposta[0]["Resposta"])
+            self.respostaParametros.append({"Parametros" : param, "Resultados" : lista})
+
+    def resultadosNormalizados(self):
+        """ Normalizar os resultados por problema do conjunto de treino """
+        self.respostaProblemaNormal = self.respostaProblema.copy()
+        mini, maxi = self.minMaxValueResultadosPorProblema()
+        divisor = maxi - mini
+        for r in self.respostaProblemaNormal:
+            resultados = r["Resultados"]
+            for resultado in resultados:
+                resp = resultado["Resposta"]
+                resp[1] = (resp[1] - mini)/divisor
+
+    def mediaResultadosPorParametros(self, p):
+        aux = p["Resultados"]
+        aux = list(map(lambda x: x[1], aux))
+        media = sum(aux)
+        media = media/(len(p["Resultados"]))
+        return media
+    
+    def minMaxValueResultadosPorProblema(self):
+        aux = self.aptidoesResultados()
+        return (min(aux), max(aux))
+
+    def aptidoesResultados(self):
+        aux = list(map(lambda x: x["Resultados"], self.respostaProblema))
+        aux = [item for sublist in aux for item in sublist]
+        aux = list(map(lambda x : x["Resposta"], aux))
+        aux = list(map(lambda x: x[1], aux))
+        return aux
+
+    def melhoresParametros(self):
+        """ Encontrar o melhor resultado """
+        melhorMedia = 0
+        melhorParam = None
+        for p in self.respostaParametros:
+            m = self.mediaResultadosPorParametros(p)
+            if m > melhorMedia:
+                melhorMedia = m
+                melhorParam = p
+        return (melhorMedia, melhorParam["Parametros"])
+
+    def temposAlcancados(self):
+        """ Retornar os tempos """
+        tempos = list()
+        for resp in self.respostaProblema:
+            resultado = resp["Resultados"]
+            for r in resultado:
+                tempo = r["Tempo"]
+                tempos.append(tempo)
+        return tempos
+
+""" Classe de Teste
+        Atributos :
+            problemas   : Dicionário de problemas a serem utilizados para o teste do método
+            metodo      : Método a ser testado
+            parametros  : dicionário com listas de parâmetros a serem testados
+            resposta    : objeto contendo as respostas do teste após realizado (none antes de testar)
+
+        Métodos :
+            realizaTreino
+                Descrição : Método de teste de algoritmos que, com base nos parametros passados 
+                            na construção da classe, avalia o desempenho do método nos casos de teste.
+                Parametros : Sim
+                    tempo    : tempo limite de execução de cada tentativa de rodar um problema
+                Retorno    : Não
+                Lança exceções : Sim
+                    IProblema.TimedOutExec  : Exceção de tempo limite
+                    NotImplementedError     : Erro de método não implementado por subclasse de IProblema
+"""
 class teste:
 
     def __init__(self, problemas, metodo, **keyargs):
         self.problemas = problemas
         self.metodo = metodo
         self.parametros = keyargs
+        self.resposta = None
 
     def realizaTeste(self, estado, tempo = list()):
         try:

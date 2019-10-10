@@ -5,6 +5,9 @@ class TimedOutExc(Exception):
     pass
 
 class IProblema:
+    # descreve o problema
+    def descricao(self):
+        raise NotImplementedError
 
     # retorna a aptidão atual de um estado
     def aptidao(self, estado):
@@ -51,13 +54,13 @@ class IProblema:
         return []
     
     # retorna o resultado da busca caso metodo de busca tenha sido passado
-    def busca(self, estado, metodoBusca = None, **keyargs):
+    def busca(self, estado, metodoBusca = None, tempo = list(), **keyargs):
         if metodoBusca is None:
             raise NotImplementedError
         if keyargs:
-            metodoBusca(self, estado, **keyargs)
+            metodoBusca(self, estado, tempo = tempo, **keyargs)
         else:
-            metodoBusca(self, estado)
+            metodoBusca(self, estado, tempo)
 
 class IProblemaGenetico(IProblema):
     

@@ -4,11 +4,14 @@ import IProblema as interface
 
 class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, interface.IProblemaGRASP, interface.IProblemaSimulatedAnnealing, interface.IProblemaGenetico, interface.IProblema):
 
-    def __init__(self, valores, maxTam, metodoBusca = None):
+    def __init__(self, valores, maxTam):
         # valores da mochila: O valor do elemento está em 0 e o volume em 1
         self.valores = valores
         self.maxTam = maxTam
-        self.metodoBusca = metodoBusca
+
+    # descreve o problema
+    def descricao(self):
+        return tuple((self.valores, self.maxTam))
 
     # retorna valor atual de um estado
     def valorAtual(self, estado):
