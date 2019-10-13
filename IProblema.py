@@ -128,7 +128,10 @@ class IProblemaGRASP(IProblema):
         estado.extend(melhor)
 
     def buscaLocal(self, estado, metodoBuscaLocal, **keyargs):
-        self.busca(estado, metodoBusca= metodoBuscaLocal, **keyargs)
+        if keyargs:
+            self.busca(estado, metodoBusca = metodoBuscaLocal, **keyargs)
+        else:
+            self.busca(estado, metodoBusca = metodoBuscaLocal)
 
 class IProblemaDescida(IProblema):
     def escolheMelhoresDescent(self, estado, estados):

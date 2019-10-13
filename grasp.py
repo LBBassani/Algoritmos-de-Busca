@@ -34,7 +34,10 @@ def grasp(problema, estado, m, numIter, metodoBuscaLocal, tempo = list()):
                 raise IProblema.TimedOutExc
             novoEstado = problema.estadoNulo()
             problema.construcaoGulosa(novoEstado, m, random.randint(0, 100))
-            problema.buscaLocal(novoEstado, metodoBuscaLocal[0], **metodoBuscaLocal[1])
+            if metodoBuscaLocal[1]:
+                problema.buscaLocal(novoEstado, metodoBuscaLocal[0], **metodoBuscaLocal[1])
+            else:
+                problema.buscaLocal(novoEstado, metodoBuscaLocal[0])
             if problema.melhorEstado([melhor, novoEstado]):
                 melhor = novoEstado
         

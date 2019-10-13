@@ -34,15 +34,12 @@ class treinamento:
         self.parametros = ParameterGrid(keyargs)
     
     
-    def realizaTreino(self, tempo = [2]):
+    def realizaTreino(self, tempoLimite = 2):
         """ primeiro passo : criar grade de parametros 
                 Como : Usando ParameterGrid do Scikit-learn
         """
-        
-        if tempo:
-            timeout = tempo[0]
-        else:
-            timeout = 2 # Tempo de timeout default de 2 minutos
+        tempo = list()
+        timeout = tempoLimite # Tempo de timeout default de 2 minutos
         
         """ segundo passo : Rodar os testes 
                 Como :  Para cada problema a ser usado para treino roda o algoritmo

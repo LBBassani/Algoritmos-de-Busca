@@ -2,7 +2,7 @@ import IProblema
 import random as r
 import math as m
 
-def deepestDescent(problema, estado):
+def deepestDescent(problema, estado, tempo = None):
     viz = list(list())
     melhorEstado = estado.copy()
 
@@ -16,7 +16,7 @@ def deepestDescent(problema, estado):
     estado.clear()
     estado.extend(melhorEstado)
 
-def multistartDescent(problema, estado, maxIter):
+def multistartDescent(problema, estado, maxIter, tempo = None):
     i = 0
     melhorEstado = problema.estadoNulo()
 
