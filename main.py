@@ -42,31 +42,8 @@ parametrosTreinamento = {
     "Beam Search" : {"nEstados" : [10, 25, 50, 100]},
     "Simulated Annealing" : {"t" : [50, 90, 100, 250, 500], "a" : [0.7, 0.85, 0.9, 0.95, 0.97, 0.99], "minT" : [1], "numIter" : [50, 100, 200, 350, 500]},
     "Algoritmo Genético" : {"maxIter" :  [50, 100, 200, 350, 500], "tamanhoPop" : [10, 20, 30], "maxSemMelhora" : [15], "chanceCross" : [0.75, 0.85, 0.95], "chanceMutacao" : [0.1, 0.2, 0.3]},
-    "GRASP" : {"m" : [2, 5, 10, 15], "numIter" : [50, 100, 200, 350, 500], "metodoBuscaLocal" : [deepestDescent, None]},
+    "GRASP" : {"m" : [2, 5, 10, 15], "numIter" : [50, 100, 200, 350, 500], "metodoBuscaLocal" : [[deepestDescent, None]]},
 }
-
-""" Testes dos algoritmos """
-""" def teste():
-    paramHC = None
-    paramBS = {"nEstados" : 3}
-    paramSA = {"t" : 50, "a" : 0.6, "minT" : 1, "numIter" : 3}
-    paramAG = {"maxIter" : 10, "tamanhoPop" : 3, "maxSemMelhora" : 15, "chanceCross" : 0.5, "chanceMutacao" : 0.5}
-    paramGP = {"m" : 2, "numIter" : 50, "metodoBuscaLocal" : [simulatedAnnealing, paramSA]}
-    try:
-        m = mochila([(1, 3), (4, 6), (5, 7)], 19)
-        metodos = [[hillClimbing, paramHC], [beamSearch, paramBS] , [simulatedAnnealing, paramSA], [algoritmoGenetico, paramAG], [grasp, paramGP]]
-        estado = list()
-        for metodo in metodos:
-            if metodo[1]:
-                m.busca(estado, metodo[0], **metodo[1])
-            else:
-                m.busca(estado,metodo[0])
-            print("Resultado do Teste com", metodo[0].__name__, ":", estado, "Valor :", m.valorAtual(estado), "Tamanho :", m.tamanhoAtual(estado))
-            estado = m.estadoNulo()
-    except NotImplementedError:
-        print("Algum método não está implementado")
-    finally:
-        print("Final do Teste :)") """
 
 # Problemas de Treino de acordo com apendice A do enunciado do primeiro trabalho de IA
 problemasTreino = {
