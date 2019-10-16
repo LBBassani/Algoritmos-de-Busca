@@ -35,13 +35,10 @@ class treinamento:
     
     
     def realizaTreino(self, tempoLimite = 2):
-        """ primeiro passo : criar grade de parametros 
-                Como : Usando ParameterGrid do Scikit-learn
-        """
         tempo = list()
         timeout = tempoLimite # Tempo de timeout default de 2 minutos
         
-        """ segundo passo : Rodar os testes 
+        """ Rodar os testes 
                 Como :  Para cada problema a ser usado para treino roda o algoritmo
                             para cada combinação de parametros vindos da grid de parametros.
                         Guarda o resultado de tempo, resposta e lista de parametros
@@ -155,10 +152,39 @@ class teste:
         self.problemas = problemas
         self.metodo = metodo
         self.parametros = keyargs
-        self.resposta = None
 
-    def realizaTeste(self, estado, tempo = list()):
-        try:
-            pass 
-        except IProblema.TimedOutExc:
-            raise
+    def realizaTeste(self, estado, tempoLimite = 5):
+        tempo = list()
+        timeout = tempoLimite # Tempo de timeout default de 5 minutos
+
+        self.resposta = list()
+        for nome, p in self.problemas.items():
+            terminou = True
+            estado = p.estadoNulo()
+            tempo.clear()
+            tempo.append(timeout)
+
+            try:
+                p.busca(estado, self.metodo, tempo, **self.parametros)
+            except IProblema.TimedOutExc:
+                # Se veio com timeout, muda a flag de termino para False
+                terminou = False
+            # Formata a resposta
+            resultado = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Terminou" : terminou}
+            resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultado}
+            self.resposta.append(resp)
+
+    def temposAlcancados(self):
+        """ Retornar os tempos """
+        tempos = list()
+        for resp in self.resposta:
+            resultado = resp["Resultados"]
+            tempo = resultado["Tempo"]
+            tempos.append(tempo)
+        return tempos
+    
+    def mediaDesvioExecucoes(self):
+        pass
+
+    def mediaDesvioTempos(self):
+        pass
