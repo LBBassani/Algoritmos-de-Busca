@@ -45,7 +45,6 @@ class ParamFileReader(object):
     def read(self):
         try:
             f = open(self.__f, "r")
-            print("arquivo aberto")
         except Exception:
             raise
         else:
@@ -55,13 +54,11 @@ class ParamFileReader(object):
                 while line:
                     if line.find("beginParam") >= 0:
                         metodo = f.readline().rstrip()
-                        print("lendo parametros de:", metodo)
                         params[metodo] = {}
                         line = f.readline()
                         while line.find("endParam") < 0:
                             words = line.split()
                             param = words.pop(0)
-                            print("lendo parametro:", param)
                             params[metodo][param] = list()
                             tipo = words.pop(0)
                             tipo = list if tipo == "list" else int if tipo == "int" else float
@@ -74,16 +71,19 @@ class ParamFileReader(object):
                 raise
             finally:
                 f.close
-                print("arquivo fechado")
 
+class resultadosFileWriter(object):
+    def __init__(self, file):
+        self.__f = file
 
-
-""" parametrosTreinamento = {
-    "Beam Search" : {"nEstados" : [10, 25, 50, 100]},
-    "Simulated Annealing" : {"t" : [50, 90, 100, 250, 500], "a" : [0.7, 0.85, 0.9, 0.95, 0.97, 0.99], "minT" : [1], "numIter" : [50, 100, 200, 350, 500]},
-    "Algoritmo Genético" : {"maxIter" :  [50, 100, 200, 350, 500], "tamanhoPop" : [10, 20, 30], "maxSemMelhora" : [15], "chanceCross" : [0.75, 0.85, 0.95], "chanceMutacao" : [0.1, 0.2, 0.3]},
-    "GRASP" : {"m" : [2, 5, 10, 15], "numIter" : [50, 100, 200, 350, 500], "metodoBuscaLocal" : [[deepestDescent, None]]},
-}
+    def write(self, resultados):
+        try:
+            f = open(self.__f, "a+")
+        except Exception:
+            raise
+        else:
+            f.print(resultados)
+            f.close
 
 # Problemas de Treino de acordo com apendice A do enunciado do primeiro trabalho de IA
 problemasTreino = {
@@ -99,26 +99,29 @@ problemasTreino = {
     "m20" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (15, 20)], 45678901)
 }
 
+paramFileReader = ParamFileReader("parametros.param")
+parametros = paramFileReader.read()
+
 # algoritmos a serem treinados
 treinamentos = {
-    "Algoritmo Genético" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametrosTreinamento["Algoritmo Genético"]),
-    "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametrosTreinamento["Simulated Annealing"]),
-    "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametrosTreinamento["Beam Search"]),
-    "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametrosTreinamento["GRASP"])
+    "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
+    "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
+    "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
+    "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
 }
 
 # resultados dos treinamentos
-resultadosTreinamentos = {
-    "Algoritmo Genético" : treinamentos["Algoritmo Genético"].realizaTreino(2),
-    "Simulated Annealing" : treinamentos["Simulated Annealing"].realizaTreino(2),
-    "Beam Search" : treinamentos["Beam Search"].realizaTreino(2),
-    "GRASP" : treinamentos["GRASP"].realizaTreino(2)
-}
+resultadosTreinamentos = { }
+for key, value in treinamentos.items():
+    resultadosTreinamentos[key] = value.realizaTreino()
+    nomeArq = "resultadoTreinamento" + key + ".result"
+    resulwriter = resultadosFileWriter(nomeArq)
+    resulwriter.write(resultadosTreinamentos[key])
 
-print(resultadosTreinamentos["Algoritmo Genético"])
+print(resultadosTreinamentos["Algoritmo Genetico"])
 print(resultadosTreinamentos["Simulated Annealing"])
 print(resultadosTreinamentos["Beam Search"])
-print(resultadosTreinamentos["GRASP"]) """
+print(resultadosTreinamentos["GRASP"])
 
 # problemas de Teste de acordo com apendice A do enunciado do primeiro trabalho de IA
 """ problemasTeste = {
@@ -142,7 +145,3 @@ print(resultadosTreinamentos["GRASP"]) """
     "GRASP" : trabalhoIA.teste(problemasTeste, grasp).realizaTeste(5),
     "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico).realizaTeste(5)
 } """
-
-paramFileReader = ParamFileReader("parametros.param")
-parametros = paramFileReader.read()
-print(parametros)
