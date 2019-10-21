@@ -9,8 +9,9 @@ import IProblema
 import random
 import threading
 from time import time
+from descent import deepestDescent
 
-def grasp(problema, estado, m, numIter, metodoBuscaLocal, tempo = list()):
+def grasp(problema, estado, m, numIter, metodoBuscaLocal = (deepestDescent, None), tempo = list()):
 
     # Rotina de tempo limite
     encerrou = list()
