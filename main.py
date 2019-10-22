@@ -99,6 +99,14 @@ problemasTreino = {
     "m17" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (2, 3), (6, 8), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (24, 25), (29, 37)], 13890000),
     "m20" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (15, 20)], 45678901)
 }
+estado = problemasTreino["m20"].estadoAleatorio()
+tempo = [2]
+try:
+    grasp(problemasTreino["m20"], estado, m = 5, numIter = 1000, tempo = tempo)
+except Exception:
+    pass
+finally:
+    print(tempo)
 
 paramFileReader = ParamFileReader("parametros.param")
 parametros = paramFileReader.read()
@@ -106,9 +114,9 @@ parametros = paramFileReader.read()
 # algoritmos a serem treinados
 treinamentos = {
     # "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
-    "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
-    "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
-    "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
+    # "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
+    # "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
+    # "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
 }
 
 # resultados dos treinamentos
