@@ -37,6 +37,7 @@ from genetico import algoritmoGenetico
 from grasp import grasp
 from descent import deepestDescent
 import trabalhoIA
+import json
 
 class ParamFileReader(object):
     def __init__(self, file):
@@ -82,7 +83,7 @@ class resultadosFileWriter(object):
         except Exception:
             raise
         else:
-            f.print(resultados)
+            f.write(json.dumps(resultados))
             f.close
 
 # Problemas de Treino de acordo com apendice A do enunciado do primeiro trabalho de IA
@@ -104,7 +105,7 @@ parametros = paramFileReader.read()
 
 # algoritmos a serem treinados
 treinamentos = {
-    "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
+    # "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
     "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
     "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
     "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
@@ -117,11 +118,6 @@ for key, value in treinamentos.items():
     nomeArq = "resultadoTreinamento" + key + ".result"
     resulwriter = resultadosFileWriter(nomeArq)
     resulwriter.write(resultadosTreinamentos[key])
-
-print(resultadosTreinamentos["Algoritmo Genetico"])
-print(resultadosTreinamentos["Simulated Annealing"])
-print(resultadosTreinamentos["Beam Search"])
-print(resultadosTreinamentos["GRASP"])
 
 # problemas de Teste de acordo com apendice A do enunciado do primeiro trabalho de IA
 """ problemasTeste = {
