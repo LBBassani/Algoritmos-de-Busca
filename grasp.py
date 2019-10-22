@@ -34,8 +34,9 @@ def grasp(problema, estado, m, numIter, metodoBuscaLocal = (deepestDescent, None
             if encerrou[0][0]:
                 raise IProblema.TimedOutExc
             novoEstado = problema.estadoNulo()
-            problema.construcaoGulosa(novoEstado, m, random.randint(0, 100))
-            timeout = [tempo[0]*60 - (time() - inicio)] if tempo else list()
+            timeout = [(tempo[0]*60 - (time() - inicio))/60] if tempo else None
+            problema.construcaoGulosa(novoEstado, m, random.randint(0, 100), timeout)
+            timeout = [(tempo[0]*60 - (time() - inicio))/60] if tempo else None
             if metodoBuscaLocal[1]: 
                 problema.buscaLocal(novoEstado, metodoBuscaLocal[0], tempo = timeout, **metodoBuscaLocal[1])
             else:
