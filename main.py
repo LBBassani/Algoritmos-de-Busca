@@ -37,13 +37,48 @@ from genetico import algoritmoGenetico
 from grasp import grasp
 from descent import deepestDescent
 import trabalhoIA
+import json
 
-parametrosTreinamento = {
-    "Beam Search" : {"nEstados" : [10, 25, 50, 100]},
-    "Simulated Annealing" : {"t" : [50, 90, 100, 250, 500], "a" : [0.7, 0.85, 0.9, 0.95, 0.97, 0.99], "minT" : [1], "numIter" : [50, 100, 200, 350, 500]},
-    "Algoritmo Genético" : {"maxIter" :  [50, 100, 200, 350, 500], "tamanhoPop" : [10, 20, 30], "maxSemMelhora" : [15], "chanceCross" : [0.75, 0.85, 0.95], "chanceMutacao" : [0.1, 0.2, 0.3]},
-    "GRASP" : {"m" : [2, 5, 10, 15], "numIter" : [50, 100, 200, 350, 500], "metodoBuscaLocal" : [[deepestDescent, None]]},
-}
+class ParamFileReader(object):
+    def __init__(self, file):
+        self.__f = file
+    
+    def read(self):
+        with open(self.__f, "r") as f:
+            params = {}
+            line = f.readline()
+            while line:
+                if line.find("beginParam") >= 0:
+                    metodo = f.readline().rstrip()
+                    params[metodo] = {}
+                    line = f.readline()
+                    while line.find("endParam") < 0:
+                        words = line.split()
+                        param = words.pop(0)
+                        params[metodo][param] = list()
+                        tipo = words.pop(0)
+                        tipo = list if tipo == "list" else int if tipo == "int" else float
+                        for w in words:
+                            params[metodo][param].append(tipo(w))
+                        line = f.readline()
+                line = f.readline()
+            return params
+
+class resultadosFileWriter(object):
+    def __init__(self, file):
+        self.__f = file
+
+    def write(self, resultados):
+        with open(self.__f, "w+") as f:
+            f.write(json.dumps(resultados))
+
+class resultadosFileReader(object):
+    def __init__(self, file):
+        self.__f = file
+    
+    def read(self):
+        with open(self.__f, "r") as f:
+            return json.load(f)
 
 # Problemas de Treino de acordo com apendice A do enunciado do primeiro trabalho de IA
 problemasTreino = {
@@ -59,26 +94,38 @@ problemasTreino = {
     "m20" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (15, 20)], 45678901)
 }
 
+paramFileReader = ParamFileReader("parametros.param")
+parametros = paramFileReader.read()
+
 # algoritmos a serem treinados
 treinamentos = {
-    "Algoritmo Genético" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametrosTreinamento["Algoritmo Genético"]),
-    "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametrosTreinamento["Simulated Annealing"]),
-    "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametrosTreinamento["Beam Search"]),
-    "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametrosTreinamento["GRASP"])
+    # "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
+    # "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
+    # "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
+    # "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
 }
 
 # resultados dos treinamentos
-resultadosTreinamentos = {
-    "Algoritmo Genético" : treinamentos["Algoritmo Genético"].realizaTreino(2),
-    "Simulated Annealing" : treinamentos["Simulated Annealing"].realizaTreino(2),
-    "Beam Search" : treinamentos["Beam Search"].realizaTreino(2),
-    "GRASP" : treinamentos["GRASP"].realizaTreino(2)
-}
+resultadosTreinamentos = { }
+for key, value in treinamentos.items():
+    resultadosTreinamentos[key] = value.realizaTreino()
+    nomeArq = "resultadoTreinamento" + key + ".result"
+    resulwriter = resultadosFileWriter(nomeArq)
+    resulwriter.write(resultadosTreinamentos[key])
 
-print(resultadosTreinamentos["Algoritmo Genético"])
-print(resultadosTreinamentos["Simulated Annealing"])
-print(resultadosTreinamentos["Beam Search"])
-print(resultadosTreinamentos["GRASP"])
+graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
+resultadosTreinamentos["GRASP"] = graspReader.read()
+
+simulatedAnnealingReader = resultadosFileReader("resultadoTreinamentoSimulated Annealing.result")
+resultadosTreinamentos["Simulated Annealing"] = simulatedAnnealingReader.read()
+
+beamSearchReader = resultadosFileReader("resultadoTreinamentoBeam Search.result")
+resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
+
+geneticoReader = resultadosFileReader("resultadoTreinamentoAlgoritmo Genetico.result")
+resultadosTreinamentos["Algoritmo Genetico"] = geneticoReader.read()
+
+print(resultadosTreinamentos)
 
 # problemas de Teste de acordo com apendice A do enunciado do primeiro trabalho de IA
 """ problemasTeste = {
@@ -94,11 +141,19 @@ print(resultadosTreinamentos["GRASP"])
     "m19" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (15, 20)], 4567) 
 } """
 
+
+
 # resultados dos testes
 """ resultadosTestes = {
-    "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing).realizaTeste(5),
-    "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch).realizaTeste(5),
-    "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing).realizaTeste(5),
-    "GRASP" : trabalhoIA.teste(problemasTeste, grasp).realizaTeste(5),
-    "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico).realizaTeste(5)
-} """
+    "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing),
+    "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch, **resultadosTreinamentos["Beam Search"][0][1]),
+    "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing, **resultadosTreinamentos["Simulated Annealing"][0][1]),
+    "GRASP" : trabalhoIA.teste(problemasTeste, grasp, **resultadosTreinamentos["GRASP"][0][1]),
+    "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
+}
+
+for key, value in resultadosTestes.items():
+    resultado = value.realizaTeste()
+    nomeArq = "resultadoFinal" + key + ".result"
+    writer = resultadosFileWriter(nomeArq)
+    writer.write(resultado) """

@@ -112,21 +112,42 @@ class IProblemaSimulatedAnnealing(IProblema):
 class IProblemaGRASP(IProblema):
 
     # método de construção guloso
-    def construcaoGulosa(self, estado, m, semente):
+    def construcaoGulosa(self, estado, m, semente, tempo = None):
+        encerrou = list()
+        encerrou.append([False])
+
+        if tempo:      
+            def saida(encerrou):
+                    encerrou.clear()
+                    encerrou.extend([True])
+            import threading
+            temporizador = threading.Timer(tempo[0]*60, saida, encerrou)
+            temporizador.start()
+
         melhor = self.estadoNulo()
         aux = melhor
         r.seed(semente)
+        try:
+            while len(aux) != 0 :
+                if encerrou[0][0]:
+                    raise TimedOutExc
+                melhor = aux
+                aux = self.escolheMelhores(self.gerarVizinhos(melhor), m)
 
-        while len(aux) != 0 :
-            melhor = aux
-            aux = self.escolheMelhores(self.gerarVizinhos(melhor), m)
-
-            if aux:
-                aux = aux[r.randint(0,len(aux)-1)]
-
-        estado.clear()
-        estado.extend(melhor)
-
+                if aux:
+                    aux = aux[r.randint(0,len(aux)-1)]
+        except TimedOutExc:
+            raise
+        else:
+            if tempo:
+                temporizador.cancel()
+        finally:
+            estado.clear()
+            estado.extend(melhor)
+            if tempo: 
+                temporizador.join()
+                tempo.clear()        
+            
     def buscaLocal(self, estado, metodoBuscaLocal, **keyargs):
         if keyargs:
             self.busca(estado, metodoBusca = metodoBuscaLocal, **keyargs)
