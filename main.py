@@ -44,47 +44,41 @@ class ParamFileReader(object):
         self.__f = file
     
     def read(self):
-        try:
-            f = open(self.__f, "r")
-        except Exception:
-            raise
-        else:
-            try:
-                params = {}
-                line = f.readline()
-                while line:
-                    if line.find("beginParam") >= 0:
-                        metodo = f.readline().rstrip()
-                        params[metodo] = {}
-                        line = f.readline()
-                        while line.find("endParam") < 0:
-                            words = line.split()
-                            param = words.pop(0)
-                            params[metodo][param] = list()
-                            tipo = words.pop(0)
-                            tipo = list if tipo == "list" else int if tipo == "int" else float
-                            for w in words:
-                                params[metodo][param].append(tipo(w))
-                            line = f.readline()
+        with open(self.__f, "r") as f:
+            params = {}
+            line = f.readline()
+            while line:
+                if line.find("beginParam") >= 0:
+                    metodo = f.readline().rstrip()
+                    params[metodo] = {}
                     line = f.readline()
-                return params
-            except Exception:
-                raise
-            finally:
-                f.close
+                    while line.find("endParam") < 0:
+                        words = line.split()
+                        param = words.pop(0)
+                        params[metodo][param] = list()
+                        tipo = words.pop(0)
+                        tipo = list if tipo == "list" else int if tipo == "int" else float
+                        for w in words:
+                            params[metodo][param].append(tipo(w))
+                        line = f.readline()
+                line = f.readline()
+            return params
 
 class resultadosFileWriter(object):
     def __init__(self, file):
         self.__f = file
 
     def write(self, resultados):
-        try:
-            f = open(self.__f, "a+")
-        except Exception:
-            raise
-        else:
+        with open(self.__f, "w+") as f:
             f.write(json.dumps(resultados))
-            f.close
+
+class resultadosFileReader(object):
+    def __init__(self, file):
+        self.__f = file
+    
+    def read(self):
+        with open(self.__f, "r") as f:
+            return json.load(f)
 
 # Problemas de Treino de acordo com apendice A do enunciado do primeiro trabalho de IA
 problemasTreino = {
@@ -106,7 +100,7 @@ parametros = paramFileReader.read()
 # algoritmos a serem treinados
 treinamentos = {
     # "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
-    "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
+    # "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
     # "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
     # "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
 }
@@ -118,6 +112,20 @@ for key, value in treinamentos.items():
     nomeArq = "resultadoTreinamento" + key + ".result"
     resulwriter = resultadosFileWriter(nomeArq)
     resulwriter.write(resultadosTreinamentos[key])
+
+graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
+resultadosTreinamentos["GRASP"] = graspReader.read()
+
+simulatedAnnealingReader = resultadosFileReader("resultadoTreinamentoSimulated Annealing.result")
+resultadosTreinamentos["Simulated Annealing"] = simulatedAnnealingReader.read()
+
+beamSearchReader = resultadosFileReader("resultadoTreinamentoBeam Search.result")
+resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
+
+geneticoReader = resultadosFileReader("resultadoTreinamentoAlgoritmo Genetico.result")
+resultadosTreinamentos["Algoritmo Genetico"] = geneticoReader.read()
+
+print(resultadosTreinamentos)
 
 # problemas de Teste de acordo com apendice A do enunciado do primeiro trabalho de IA
 """ problemasTeste = {
@@ -133,11 +141,19 @@ for key, value in treinamentos.items():
     "m19" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (15, 20)], 4567) 
 } """
 
+
+
 # resultados dos testes
 """ resultadosTestes = {
-    "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing).realizaTeste(5),
-    "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch).realizaTeste(5),
-    "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing).realizaTeste(5),
-    "GRASP" : trabalhoIA.teste(problemasTeste, grasp).realizaTeste(5),
-    "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico).realizaTeste(5)
-} """
+    "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing),
+    "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch, **resultadosTreinamentos["Beam Search"][0][1]),
+    "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing, **resultadosTreinamentos["Simulated Annealing"][0][1]),
+    "GRASP" : trabalhoIA.teste(problemasTeste, grasp, **resultadosTreinamentos["GRASP"][0][1]),
+    "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
+}
+
+for key, value in resultadosTestes.items():
+    resultado = value.realizaTeste()
+    nomeArq = "resultadoFinal" + key + ".result"
+    writer = resultadosFileWriter(nomeArq)
+    writer.write(resultado) """

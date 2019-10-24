@@ -153,7 +153,7 @@ class teste:
         self.metodo = metodo
         self.parametros = keyargs
 
-    def realizaTeste(self, estado, tempoLimite = 5):
+    def realizaTeste(self, tempoLimite = 5):
         tempo = list()
         timeout = tempoLimite # Tempo de timeout default de 5 minutos
 
@@ -173,6 +173,7 @@ class teste:
             resultado = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Terminou" : terminou}
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultado}
             self.resposta.append(resp)
+        return (self.resposta, self.temposAlcancados())
 
     def temposAlcancados(self):
         """ Retornar os tempos """
