@@ -193,9 +193,9 @@ class teste:
     def mediaDesvioExecucoes(self):
         serie = list(map(lambda x: x["Resultados"]["Resposta"][1], self.resposta))
         serie = pd.Series(serie)
-        return (serie.mean, serie.std)
+        return (serie.mean(), serie.std())
 
     def mediaDesvioTempos(self):
         serie = self.temposAlcancados()
         serie = pd.Series(serie)
-        return (serie.mean, serie.std)
+        return (serie.mean(), serie.std())
