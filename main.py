@@ -213,7 +213,18 @@ for prob, valor in normalizadoPorProblemaTeste.items():
 # Obter média e descio padrão dos resultados normalizados de cada metaheurística
 meanstdNormalizadas = { }
 for al, valor in normalizadoPorHeuristica.items():
-    aux = pd.Series(normalizadoPorHeuristica[al])
+    aux = pd.Series(valor)
     meanstdNormalizadas[al] = (aux.mean(), aux.std())
 
-print(meanstdNormalizadas)
+resultadosPorHeuristica = { }
+for al, valor in resultadosTestes.items():
+    valor = valor[0]
+    resultadosPorHeuristica[al] = list()
+    for v in valor:
+        resultadosPorHeuristica[al].append(v["Resultados"]["Resposta"][1])
+
+meanstdHeuristicas = { }
+for al, valor in resultadosPorHeuristica.items():
+    aux = pd.Series(valor)
+    meanstdHeuristicas[al] = (aux.mean(), aux.std())
+
