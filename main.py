@@ -35,6 +35,7 @@ from beamSearch import beamSearch
 from simulatedAnnealing import simulatedAnnealing
 from genetico import algoritmoGenetico
 from grasp import grasp
+import pandas as pd
 import trabalhoIA
 import json
 
@@ -199,14 +200,20 @@ for prob, _ in problemasTeste.items():
         normalizadoPorProblemaTeste[prob][algoritmo] = (valor["Resposta"][1] - mini)/divisor
 
 normalizadoPorHeuristica = {
-    "Hill Climbing" : {},
-    "Beam Search" : {},
-    "Simulated Annealing" : {},
-    "GRASP" : {},
-    "Algoritmo Genetico" : {}
+    "Hill Climbing" : list(),
+    "Beam Search" : list(),
+    "Simulated Annealing" : list(),
+    "GRASP" : list(),
+    "Algoritmo Genetico" : list()
 }
 for prob, valor in normalizadoPorProblemaTeste.items():
     for meta, resul in valor.items():
-        normalizadoPorHeuristica[meta][prob] = resul
+        normalizadoPorHeuristica[meta].append(resul)
 
-print(normalizadoPorHeuristica)
+# Obter média e descio padrão dos resultados normalizados de cada metaheurística
+meanstdNormalizadas = { }
+for al, valor in normalizadoPorHeuristica.items():
+    aux = pd.Series(normalizadoPorHeuristica[al])
+    meanstdNormalizadas[al] = (aux.mean(), aux.std())
+
+print(meanstdNormalizadas)
