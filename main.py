@@ -151,11 +151,11 @@ problemasTeste = {
 
 # resultados dos testes
 resultadosTestes = {
-    "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing),
-    "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch, **resultadosTreinamentos["Beam Search"][0][1]),
-    "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing, **resultadosTreinamentos["Simulated Annealing"][0][1]),
-    "GRASP" : trabalhoIA.teste(problemasTeste, grasp, **resultadosTreinamentos["GRASP"][0][1]),
-    "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
+    # "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing),
+    # "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch, **resultadosTreinamentos["Beam Search"][0][1]),
+    # "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing, **resultadosTreinamentos["Simulated Annealing"][0][1]),
+    # "GRASP" : trabalhoIA.teste(problemasTeste, grasp, **resultadosTreinamentos["GRASP"][0][1]),
+    # "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
 }
 
 # Realização dos Testes e escrita nos arquivos
@@ -166,7 +166,7 @@ for key, value in resultadosTestes.items():
     writer.write(resultado)
 
 # Leitura dos arquivos de resultados
-""" hillClimbingReader = resultadosFileReader("resultadoFinalHill Climbing.result")
+hillClimbingReader = resultadosFileReader("resultadoFinalHill Climbing.result")
 resultadosTestes["Hill Climbing"] = hillClimbingReader.read()
 
 graspReader = resultadosFileReader("resultadoFinalGRASP.result")
@@ -179,5 +179,5 @@ beamSearchReader = resultadosFileReader("resultadoFinalBeam Search.result")
 resultadosTestes["Beam Search"] = beamSearchReader.read()
 
 geneticoReader = resultadosFileReader("resultadoFinalAlgoritmo Genetico.result")
-resultadosTestes["Algoritmo Genetico"] = geneticoReader.read() """
+resultadosTestes["Algoritmo Genetico"] = geneticoReader.read()
 
