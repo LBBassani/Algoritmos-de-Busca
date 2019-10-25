@@ -228,3 +228,12 @@ for al, valor in resultadosPorHeuristica.items():
     aux = pd.Series(valor)
     meanstdHeuristicas[al] = (aux.mean(), aux.std())
 
+temposExecucao = { }
+for al, valor in resultadosTestes.items():
+    valor = valor[1]
+    temposExecucao[al] = valor
+
+meanstdTempos = { }
+for al, valor in temposExecucao.items():
+    aux = pd.Series(valor)
+    meanstdTempos[al] = (aux.mean(), aux.std())
