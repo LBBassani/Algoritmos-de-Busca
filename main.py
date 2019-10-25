@@ -155,7 +155,7 @@ resultadosTestes = {
     # "Beam Search" : trabalhoIA.teste(problemasTeste, beamSearch, **resultadosTreinamentos["Beam Search"][0][1]),
     # "Simulated Annealing" : trabalhoIA.teste(problemasTeste, simulatedAnnealing, **resultadosTreinamentos["Simulated Annealing"][0][1]),
     # "GRASP" : trabalhoIA.teste(problemasTeste, grasp, **resultadosTreinamentos["GRASP"][0][1]),
-    # "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
+    # "Algoritmo Genetico" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
 }
 
 # Realização dos Testes e escrita nos arquivos
@@ -181,3 +181,32 @@ resultadosTestes["Beam Search"] = beamSearchReader.read()
 geneticoReader = resultadosFileReader("resultadoFinalAlgoritmo Genetico.result")
 resultadosTestes["Algoritmo Genetico"] = geneticoReader.read()
 
+# Cria dicionário de resultados por problema
+resultadosProblemas = { }
+normalizadoPorProblemaTeste = {}
+for prob, _ in problemasTeste.items():
+    resultadosProblemas[prob] = {}
+    for algoritmo, valor in resultadosTestes.items():
+        valor = valor[0]
+        aux = list(filter(lambda x: x["Problema"][0] == prob, valor))
+        valor = list(map(lambda x: x["Resultados"], aux))
+        resultadosProblemas[prob][algoritmo] = valor[0]
+    normalizadoPorProblemaTeste[prob] = {}
+    aux = list(map(lambda x: x[1]["Resposta"][1], resultadosProblemas[prob].items()))
+    mini, maxi = min(aux), max(aux)
+    divisor = maxi - mini
+    for algoritmo, valor in resultadosProblemas[prob].items():
+        normalizadoPorProblemaTeste[prob][algoritmo] = (valor["Resposta"][1] - mini)/divisor
+
+normalizadoPorHeuristica = {
+    "Hill Climbing" : {},
+    "Beam Search" : {},
+    "Simulated Annealing" : {},
+    "GRASP" : {},
+    "Algoritmo Genetico" : {}
+}
+for prob, valor in normalizadoPorProblemaTeste.items():
+    for meta, resul in valor.items():
+        normalizadoPorHeuristica[meta][prob] = resul
+
+print(normalizadoPorHeuristica)
