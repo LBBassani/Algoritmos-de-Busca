@@ -35,10 +35,10 @@ from beamSearch import beamSearch
 from simulatedAnnealing import simulatedAnnealing
 from genetico import algoritmoGenetico
 from grasp import grasp
-from descent import deepestDescent
 import trabalhoIA
 import json
 
+# Leitura de parametros
 class ParamFileReader(object):
     def __init__(self, file):
         self.__f = file
@@ -64,6 +64,7 @@ class ParamFileReader(object):
                 line = f.readline()
             return params
 
+# Escrita de resultados
 class resultadosFileWriter(object):
     def __init__(self, file):
         self.__f = file
@@ -72,6 +73,7 @@ class resultadosFileWriter(object):
         with open(self.__f, "w+") as f:
             f.write(json.dumps(resultados))
 
+# Leitura de Resultados
 class resultadosFileReader(object):
     def __init__(self, file):
         self.__f = file
@@ -94,6 +96,7 @@ problemasTreino = {
     "m20" : mochila([(1, 3), (4, 6), (5, 7), (3, 4), (2, 6), (1, 2), (3, 5), (7, 10), (10, 15), (13, 20), (15, 20)], 45678901)
 }
 
+# Leitura dos Parametros
 paramFileReader = ParamFileReader("parametros.param")
 parametros = paramFileReader.read()
 
@@ -113,6 +116,7 @@ for key, value in treinamentos.items():
     resulwriter = resultadosFileWriter(nomeArq)
     resulwriter.write(resultadosTreinamentos[key])
 
+# Leitura dos Resultados do Treinamento
 graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
 resultadosTreinamentos["GRASP"] = graspReader.read()
 
@@ -125,6 +129,7 @@ resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
 geneticoReader = resultadosFileReader("resultadoTreinamentoAlgoritmo Genetico.result")
 resultadosTreinamentos["Algoritmo Genetico"] = geneticoReader.read()
 
+# Apresenta os parametros decididos
 print("Parametros Algoritmo Genetico:", resultadosTreinamentos["Algoritmo Genetico"][0][1])
 print("Parametros Beam Search:", resultadosTreinamentos["Beam Search"][0][1])
 print("Parametros Simulated Annealing:", resultadosTreinamentos["Simulated Annealing"][0][1])
@@ -153,8 +158,26 @@ resultadosTestes = {
     "Algoritmo Genético" : trabalhoIA.teste(problemasTeste, algoritmoGenetico, **resultadosTreinamentos["Algoritmo Genetico"][0][1])
 }
 
+# Realização dos Testes e escrita nos arquivos
 for key, value in resultadosTestes.items():
     resultado = value.realizaTeste()
     nomeArq = "resultadoFinal" + key + ".result"
     writer = resultadosFileWriter(nomeArq)
     writer.write(resultado)
+
+# Leitura dos arquivos de resultados
+""" hillClimbingReader = resultadosFileReader("resultadoFinalHill Climbing.result")
+resultadosTestes["Hill Climbing"] = hillClimbingReader.read()
+
+graspReader = resultadosFileReader("resultadoFinalGRASP.result")
+resultadosTestes["GRASP"] = graspReader.read()
+
+simulatedAnnealingReader = resultadosFileReader("resultadoFinalSimulated Annealing.result")
+resultadosTestes["Simulated Annealing"] = simulatedAnnealingReader.read()
+
+beamSearchReader = resultadosFileReader("resultadoFinalBeam Search.result")
+resultadosTestes["Beam Search"] = beamSearchReader.read()
+
+geneticoReader = resultadosFileReader("resultadoFinalAlgoritmo Genetico.result")
+resultadosTestes["Algoritmo Genetico"] = geneticoReader.read() """
+

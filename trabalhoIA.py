@@ -2,6 +2,7 @@
 para o primeiro trabalho prático de IA 
 """
 import IProblema
+import pandas as pd
 from sklearn.model_selection import ParameterGrid
 
 
@@ -21,7 +22,10 @@ from sklearn.model_selection import ParameterGrid
                             desempenho nos casos de treinamento.
                 Parametros : Sim
                     tempo    : tempo limite de execução de cada tentativa de rodar um problema
-                Retorno    : Não
+                Retorno    : Sim
+                    melhoresParametros : Tupla no formato (melhor média, melhores parametros)
+                    respostaProblema : Respostas obetidas nos problemas, juntamente com os parâmetros usados
+                    temposAlcancados : Lista com todos os tempos alcançados durante o treinamento
                 Lança exceções : Sim
                     IProblema.TimedOutExec  : Exceção de tempo limite
                     NotImplementedError     : Erro de método não implementado por subclasse de IProblema
@@ -141,7 +145,9 @@ class treinamento:
                             na construção da classe, avalia o desempenho do método nos casos de teste.
                 Parametros : Sim
                     tempo    : tempo limite de execução de cada tentativa de rodar um problema
-                Retorno    : Não
+                Retorno    : Sim
+                    resposta : Respostas alcançadas para cada problema
+                    temposAlcançados : lista com os tempos de execução de cada problema
                 Lança exceções : Sim
                     IProblema.TimedOutExec  : Exceção de tempo limite
                     NotImplementedError     : Erro de método não implementado por subclasse de IProblema
@@ -173,7 +179,7 @@ class teste:
             resultado = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Terminou" : terminou}
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultado}
             self.resposta.append(resp)
-        return (self.resposta, self.temposAlcancados())
+        return (self.resposta, self.temposAlcancados(), self.mediaDesvioExecucoes(), self.mediaDesvioTempos())
 
     def temposAlcancados(self):
         """ Retornar os tempos """
@@ -185,7 +191,11 @@ class teste:
         return tempos
     
     def mediaDesvioExecucoes(self):
-        pass
+        serie = list(map(lambda x: x["Resultados"]["Resposta"][1], self.resposta))
+        serie = pd.Series(serie)
+        return (serie.mean, serie.std)
 
     def mediaDesvioTempos(self):
-        pass
+        serie = self.temposAlcancados()
+        serie = pd.Series(serie)
+        return (serie.mean, serie.std)
