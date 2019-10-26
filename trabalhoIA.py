@@ -4,6 +4,7 @@ para o primeiro trabalho prático de IA
 import IProblema
 import pandas as pd
 from sklearn.model_selection import ParameterGrid
+from queue import PriorityQueue
 
 
 """ Classe de Treinameto
@@ -69,7 +70,7 @@ class treinamento:
             self.respostaProblema.append(resp)
         self.resultadosNormalizados()
         self.resultadosPorParametros()
-        return (self.melhoresParametros(), self.respostaProblema, self.temposAlcancados())
+        return (self.melhoresParametros(), self.respostaProblema, self.temposAlcancados(), self.dezMelhores, self.respostaProblemaNormal)
 
     def resultadosPorParametros(self):
         """ Montar os resultados por parametros """
@@ -113,13 +114,20 @@ class treinamento:
 
     def melhoresParametros(self):
         """ Encontrar o melhor resultado """
+        dezMelhores = PriorityQueue(10)
         melhorMedia = 0
         melhorParam = None
         for p in self.respostaParametros:
             m = self.mediaResultadosPorParametros(p)
             if m > melhorMedia:
+                if dezMelhores.full():
+                    dezMelhores.get()
+                dezMelhores.put((m, p))
                 melhorMedia = m
                 melhorParam = p
+        self.dezMelhores = list()
+        for _ in range(0, 10):
+            self.dezMelhores.append(dezMelhores.get()[1])
         return (melhorMedia, melhorParam["Parametros"])
 
     def temposAlcancados(self):
