@@ -1,10 +1,10 @@
 """ Problemas de teste e treinamento 
 para o primeiro trabalho prático de IA 
 """
-import IProblema
-import pandas as pd
+from Busca.ProblemasBusca import IProblema
 from sklearn.model_selection import ParameterGrid
 from queue import PriorityQueue
+import pandas as pd
 
 
 """ Classe de Treinameto

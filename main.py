@@ -29,12 +29,12 @@
                         * Colonia de Formigas
                         * Enxame de Partículas
 """
-from mochila import mochila
-from hillClimbing import hillClimbing
-from beamSearch import beamSearch
-from simulatedAnnealing import simulatedAnnealing
-from genetico import algoritmoGenetico
-from grasp import grasp
+from Busca.ProblemasBusca.mochila import mochila
+from Busca.AlgoritmosBusca.hillClimbing import hillClimbing
+from Busca.AlgoritmosBusca.beamSearch import beamSearch
+from Busca.AlgoritmosBusca.simulatedAnnealing import simulatedAnnealing
+from Busca.AlgoritmosBusca.genetico import algoritmoGenetico
+from Busca.AlgoritmosBusca.grasp import grasp
 import pandas as pd
 import trabalhoIA
 import json
@@ -105,7 +105,7 @@ parametros = paramFileReader.read()
 treinamentos = {
     # "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
     # "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
-    # "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
+    "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
     # "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
 }
 
@@ -118,7 +118,7 @@ for key, value in treinamentos.items():
     resulwriter.write(resultadosTreinamentos[key])
 
 # Leitura dos Resultados do Treinamento
-graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
+""" graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
 resultadosTreinamentos["GRASP"] = graspReader.read()
 
 simulatedAnnealingReader = resultadosFileReader("resultadoTreinamentoSimulated Annealing.result")
@@ -135,6 +135,8 @@ print("Parametros Algoritmo Genetico:", resultadosTreinamentos["Algoritmo Geneti
 print("Parametros Beam Search:", resultadosTreinamentos["Beam Search"][0][1])
 print("Parametros Simulated Annealing:", resultadosTreinamentos["Simulated Annealing"][0][1])
 print("Parametros GRASP:", resultadosTreinamentos["GRASP"][0][1])
+
+
 
 # problemas de Teste de acordo com apendice A do enunciado do primeiro trabalho de IA
 problemasTeste = {
@@ -237,3 +239,4 @@ meanstdTempos = { }
 for al, valor in temposExecucao.items():
     aux = pd.Series(valor)
     meanstdTempos[al] = (aux.mean(), aux.std())
+ """
