@@ -1,8 +1,8 @@
 import random as r
 import math as m
-import IProblema as interface
+from .IProblema import IProblema, IProblemaBranchAndBound, IProblemaDescida, IProblemaGenetico, IProblemaGRASP, IProblemaSimulatedAnnealing
 
-class mochila(interface.IProblemaBranchAndBound, interface.IProblemaDescida, interface.IProblemaGRASP, interface.IProblemaSimulatedAnnealing, interface.IProblemaGenetico, interface.IProblema):
+class mochila(IProblemaBranchAndBound, IProblemaDescida, IProblemaGRASP, IProblemaSimulatedAnnealing, IProblemaGenetico, IProblema):
 
     def __init__(self, valores, maxTam):
         # valores da mochila: O valor do elemento está em 0 e o volume em 1

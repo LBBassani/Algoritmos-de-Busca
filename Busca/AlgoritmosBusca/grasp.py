@@ -5,11 +5,11 @@
             numIter : número de iterações total do algoritmo (critério de parada)
         Necessita de Estado Inicial : Não
 """
-import IProblema
+from ..ProblemasBusca import IProblema
 import random
 import threading
 from time import time
-from descent import deepestDescent
+from .descent import deepestDescent
 
 def grasp(problema, estado, m, numIter, metodoBuscaLocal = (deepestDescent, None), tempo = list()):
 

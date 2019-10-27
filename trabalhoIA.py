@@ -1,8 +1,10 @@
 """ Problemas de teste e treinamento 
 para o primeiro trabalho prático de IA 
 """
-import IProblema
+from Busca.ProblemasBusca import IProblema
 from sklearn.model_selection import ParameterGrid
+from queue import PriorityQueue
+import pandas as pd
 
 
 """ Classe de Treinameto
@@ -21,7 +23,10 @@ from sklearn.model_selection import ParameterGrid
                             desempenho nos casos de treinamento.
                 Parametros : Sim
                     tempo    : tempo limite de execução de cada tentativa de rodar um problema
-                Retorno    : Não
+                Retorno    : Sim
+                    melhoresParametros : Tupla no formato (melhor média, melhores parametros)
+                    respostaProblema : Respostas obetidas nos problemas, juntamente com os parâmetros usados
+                    temposAlcancados : Lista com todos os tempos alcançados durante o treinamento
                 Lança exceções : Sim
                     IProblema.TimedOutExec  : Exceção de tempo limite
                     NotImplementedError     : Erro de método não implementado por subclasse de IProblema
@@ -65,7 +70,7 @@ class treinamento:
             self.respostaProblema.append(resp)
         self.resultadosNormalizados()
         self.resultadosPorParametros()
-        return (self.melhoresParametros(), self.respostaProblema, self.temposAlcancados())
+        return (self.melhoresParametros(), self.respostaProblema, self.temposAlcancados(), self.dezMelhores, self.respostaProblemaNormal)
 
     def resultadosPorParametros(self):
         """ Montar os resultados por parametros """
@@ -109,13 +114,20 @@ class treinamento:
 
     def melhoresParametros(self):
         """ Encontrar o melhor resultado """
+        dezMelhores = PriorityQueue(10)
         melhorMedia = 0
         melhorParam = None
         for p in self.respostaParametros:
             m = self.mediaResultadosPorParametros(p)
             if m > melhorMedia:
+                if dezMelhores.full():
+                    dezMelhores.get()
+                dezMelhores.put((m, p))
                 melhorMedia = m
                 melhorParam = p
+        self.dezMelhores = list()
+        for _ in range(0, 10):
+            self.dezMelhores.append(dezMelhores.get()[1])
         return (melhorMedia, melhorParam["Parametros"])
 
     def temposAlcancados(self):
@@ -141,7 +153,9 @@ class treinamento:
                             na construção da classe, avalia o desempenho do método nos casos de teste.
                 Parametros : Sim
                     tempo    : tempo limite de execução de cada tentativa de rodar um problema
-                Retorno    : Não
+                Retorno    : Sim
+                    resposta : Respostas alcançadas para cada problema
+                    temposAlcançados : lista com os tempos de execução de cada problema
                 Lança exceções : Sim
                     IProblema.TimedOutExec  : Exceção de tempo limite
                     NotImplementedError     : Erro de método não implementado por subclasse de IProblema
@@ -173,7 +187,7 @@ class teste:
             resultado = {"Tempo" : tempo[0], "Resposta" : [estado.copy(), p.aptidao(estado)], "Terminou" : terminou}
             resp = {"Problema" : (nome, p.descricao()), "Resultados" : resultado}
             self.resposta.append(resp)
-        return (self.resposta, self.temposAlcancados())
+        return (self.resposta, self.temposAlcancados(), self.mediaDesvioExecucoes(), self.mediaDesvioTempos())
 
     def temposAlcancados(self):
         """ Retornar os tempos """
@@ -185,7 +199,11 @@ class teste:
         return tempos
     
     def mediaDesvioExecucoes(self):
-        pass
+        serie = list(map(lambda x: x["Resultados"]["Resposta"][1], self.resposta))
+        serie = pd.Series(serie)
+        return (serie.mean(), serie.std())
 
     def mediaDesvioTempos(self):
-        pass
+        serie = self.temposAlcancados()
+        serie = pd.Series(serie)
+        return (serie.mean(), serie.std())

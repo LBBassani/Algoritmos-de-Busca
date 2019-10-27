@@ -5,7 +5,7 @@
         Necessita de Estado Inicial : Sim
 """
 
-import IProblema
+from ..ProblemasBusca import IProblema
 from queue import PriorityQueue
 
 def branch_and_bound(problema, estado, otimista):
