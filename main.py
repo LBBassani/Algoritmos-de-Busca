@@ -29,12 +29,6 @@
                         * Colonia de Formigas
                         * Enxame de Partículas
 """
-from Busca.ProblemasBusca.mochila import mochila
-from Busca.AlgoritmosBusca.hillClimbing import hillClimbing
-from Busca.AlgoritmosBusca.beamSearch import beamSearch
-from Busca.AlgoritmosBusca.simulatedAnnealing import simulatedAnnealing
-from Busca.AlgoritmosBusca.genetico import algoritmoGenetico
-from Busca.AlgoritmosBusca.grasp import grasp
 from ioTools import resultadosFileReader
 from problemas import problemasTeste, problemasTreino
 import pandas as pd
