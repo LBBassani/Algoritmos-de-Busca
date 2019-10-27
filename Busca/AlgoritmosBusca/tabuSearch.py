@@ -5,7 +5,7 @@
         Necessita de Estado Inicial : Sim
 """
 
-import IProblema
+from ..ProblemasBusca import IProblema
 
 def tabuSearch(problema, estado, numIter):
     melhor = list()

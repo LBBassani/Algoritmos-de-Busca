@@ -9,7 +9,7 @@
             chanceMutacao : chance de ocorrer mutação
         Necessita de Estado Inicial : Não
 """
-import IProblema
+from ..ProblemasBusca import IProblema
 import random
 import threading
 from time import time

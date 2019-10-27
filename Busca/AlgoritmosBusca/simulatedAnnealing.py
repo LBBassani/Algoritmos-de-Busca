@@ -7,7 +7,7 @@
             numIter : quantidade de iterações por temperatura
         Necessita de Estado Inicial : Sim
 """
-import IProblema
+from ..ProblemasBusca import IProblema
 import threading
 from time import time
 import random

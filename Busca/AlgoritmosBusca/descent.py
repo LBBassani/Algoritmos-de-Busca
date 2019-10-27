@@ -1,4 +1,4 @@
-import IProblema
+from ..ProblemasBusca import IProblema
 import random as r
 import math as m
 import threading
