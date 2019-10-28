@@ -31,6 +31,7 @@
 """
 from ioTools import resultadosFileReader
 from problemas import problemasTeste, problemasTreino
+from queue import PriorityQueue
 import pandas as pd
 import numpy as np
 import seaborn as sea
@@ -165,6 +166,57 @@ with open("Resultados/MediasStd.txt", "w") as fp:
         aux = pd.Series(valor)
         meanstdTempos[al] = (aux.mean(), aux.std())
         fp.write(str(al)+ "\t" + str(meanstdHeuristicas[al][0]) + "\t" + str(meanstdHeuristicas[al][1]) + "\t" + str(meanstdNormalizadas[al][0]) + "\t" + str(meanstdNormalizadas[al][1]) + "\t" + str(meanstdTempos[al][0]) + "\t" + str(meanstdTempos[al][1]) + "\n")
+
+mediaRanque = {
+    "Hill Climbing" : list(),
+    "Beam Search" : list(),
+    "Simulated Annealing" : list(),
+    "GRASP" : list(),
+    "Algoritmo Genetico" : list()
+}
+for p, resul in resultadosProblemas.items():
+    ranque = PriorityQueue()
+    for al, valor in resul.items():
+        ranque.put((valor["Resposta"][1], al))
+    listRanque = list()
+    while not ranque.empty():
+        listRanque.append(ranque.get())
+    listRanque.reverse()
+
+    valorRanque = list()
+    i = 0
+    while True:
+        if i not in range(0, len(listRanque)):
+            break
+        mold = listRanque[i][0]
+        m = listRanque[i+1][0] if (i+1) in range(0, len(listRanque)) else 0
+        valor = i + 1
+        j = 0
+        while(m == mold and (i+j) in range(0, len(listRanque)-1)):
+            m = listRanque[i+j][0]
+            if (m != mold):
+                break
+            valor += 1
+            j += 1
+        j = 1 if j == 0 else j
+        valor /= j
+        for k in range(0, j):
+            valorRanque.append((valor, listRanque[i+k]))
+        i = i + j
+
+    with open("Resultados/Ranque"+ p +".txt", "w") as fp:
+        fp.write("Ranque\tAlgoritmo\tValor\n")
+        for r in valorRanque:
+            mediaRanque[r[1][1]].append(r[0])
+            fp.write(str(r[0]) + "\t" + str(r[1][1]) + "\t" + str(r[1][0]) + "\n" )
+
+with open("Resultados/Ranque.txt", "w") as fp:
+    p = len(problemasTeste.items())
+    medias = {}
+    fp.write("Algoritmo\tMedia Ranque\n")
+    for al, r in mediaRanque.items():
+        fp.write(str(al)+"\t"+str(sum(mediaRanque[al]) / p) + "\n")
+
 
 # Impressão dos BoxPlots
 tempos = list()
