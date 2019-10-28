@@ -13,16 +13,16 @@ parametros = paramFileReader.read()
 
 # algoritmos a serem treinados
 treinamentos = {
-    # "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
-    # "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
+    "Algoritmo Genetico" : trabalhoIA.treinamento(problemasTreino, algoritmoGenetico, **parametros["Algoritmo Genetico"]),
+    "GRASP" : trabalhoIA.treinamento(problemasTreino, grasp, **parametros["GRASP"]),
     "Simulated Annealing" : trabalhoIA.treinamento(problemasTreino, simulatedAnnealing, **parametros["Simulated Annealing"]),
-    # "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
+    "Beam Search" : trabalhoIA.treinamento(problemasTreino, beamSearch, **parametros["Beam Search"])
 }
 
 # resultados dos treinamentos
 resultadosTreinamentos = { }
 for key, value in treinamentos.items():
     resultadosTreinamentos[key] = value.realizaTreino()
-    nomeArq = "resultadoTreinamento" + key + ".result"
+    nomeArq = "Resultados/resultadoTreinamento" + key + ".result"
     resulwriter = resultadosFileWriter(nomeArq)
     resulwriter.write(resultadosTreinamentos[key])

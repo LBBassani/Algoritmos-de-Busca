@@ -119,14 +119,21 @@ class treinamento:
         melhorParam = None
         for p in self.respostaParametros:
             m = self.mediaResultadosPorParametros(p)
-            if m > melhorMedia:
-                if dezMelhores.full():
-                    dezMelhores.get()
+            if dezMelhores.full():
+                mold, pold = dezMelhores.get()
+                if m < mold:
+                    dezMelhores.put((mold, pold))
+                else:
+                    dezMelhores.put((m, p))
+            else:
                 dezMelhores.put((m, p))
+            if m > melhorMedia:
                 melhorMedia = m
                 melhorParam = p
         self.dezMelhores = list()
         for _ in range(0, 10):
+            if dezMelhores.empty():
+                break
             self.dezMelhores.append(dezMelhores.get()[1])
         return (melhorMedia, melhorParam["Parametros"])
 
