@@ -180,6 +180,10 @@ for nome, meta in resultadosTestes.items():
         aux.append(resposta[1])
     resultados.append(pd.DataFrame(aux).assign(Algoritmo = nome))
 
+resultadosNorm = list()
+for nome, meta in normalizadoPorHeuristica.items():
+    resultadosNorm.append(pd.DataFrame(meta).assign(Algoritmo = nome))
+
 # Boxplot dos tempos de treinamento
 tempos = pd.concat(tempos)
 tempos = pd.melt(tempos, id_vars=["Algoritmo"],value_name="Tempo")
@@ -193,3 +197,9 @@ resultados = pd.melt(resultados, id_vars=["Algoritmo"], value_name="Resultados")
 sea.boxplot(x = "Algoritmo", y = "Resultados", data= resultados)
 plt.title("Resultados de Teste")
 plt.savefig("Resultados/ResultadosTeste.png")
+
+resultadosNorm = pd.concat(resultadosNorm)
+resultadosNorm = pd.melt(resultadosNorm, id_vars=["Algoritmo"], value_name="Resultados")
+sea.boxplot(x = "Algoritmo", y = "Resultados", data= resultadosNorm)
+plt.title("Resultados Normalizados de Teste")
+plt.savefig("Resultados/ResultadosNormalizadosTeste.png")
