@@ -223,11 +223,10 @@ for al, m in mediaRanque.items():
 listaMedia = list()
 while not filaMedia.empty():
     listaMedia.append(filaMedia.get())
-listaMedia.reverse()
 
 with open("Resultados/Ranque.txt", "w") as fp:
     fp.write("Algoritmo\tMedia Ranque\n")
-    print("\nAlgoritmos em Ordem de Media de Ranqueamento")
+    print("\nAlgoritmos em ordem crescente de média de Ranqueamento")
     for m in listaMedia:
         print(m[0], m[1])
         fp.write(str(m[1])+"\t"+str(m[0]) + "\n")
@@ -238,9 +237,8 @@ for al, m in meanstdNormalizadas.items():
 listaMedia = list()
 while not filaMedia.empty():
     listaMedia.append(filaMedia.get())
-listaMedia.reverse()
 
-print("\nAlgoritmos em ordem de média Normalizada")
+print("\nAlgoritmos em ordem crescente de média Normalizada")
 for m in listaMedia:
     print(m[0], m[1])
 
