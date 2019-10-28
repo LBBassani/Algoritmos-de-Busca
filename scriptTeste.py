@@ -41,6 +41,6 @@ resultadosTestes = {
 # Realização dos Testes e escrita nos arquivos
 for key, value in resultadosTestes.items():
     resultado = value.realizaTeste()
-    nomeArq = "resultadoFinal" + key + ".result"
+    nomeArq = "Resultados/resultadoFinal" + key + ".result"
     writer = resultadosFileWriter(nomeArq)
     writer.write(resultado)

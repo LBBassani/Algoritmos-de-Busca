@@ -23,6 +23,6 @@ treinamentos = {
 resultadosTreinamentos = { }
 for key, value in treinamentos.items():
     resultadosTreinamentos[key] = value.realizaTreino()
-    nomeArq = "resultadoTreinamento" + key + ".result"
+    nomeArq = "Resultados/resultadoTreinamento" + key + ".result"
     resulwriter = resultadosFileWriter(nomeArq)
     resulwriter.write(resultadosTreinamentos[key])
