@@ -62,12 +62,14 @@ for nome, meta in resultadosTreinamentos.items():
     meta = meta[3]
     resultados = list()
     i = 1
-    for resposta in meta:
-        aux = list()
-        for resp in resposta["Resultados"]:
-            aux.append(resp[1])
-        resultados.append(pd.DataFrame(aux).assign(Hiperparametros = i))
-        i += 1
+    with open("Resultados/ResultadosTreinamento"+nome+".legenda", "w") as legenda:
+        for resposta in meta:
+            aux = list()
+            for resp in resposta["Resultados"]:
+                aux.append(resp[1])
+            resultados.append(pd.DataFrame(aux).assign(Hiperparametros = i))
+            legenda.write(str(i) + ":" + str(resposta["Parametros"])+"\n")
+            i += 1
     # Boxplot dos resultados de treinamento
     resultados = pd.concat(resultados)
     resultados = pd.melt(resultados, id_vars=["Hiperparametros"], value_name="Resultados")

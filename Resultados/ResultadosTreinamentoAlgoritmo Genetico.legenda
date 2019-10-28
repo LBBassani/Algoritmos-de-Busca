@@ -1,0 +1,10 @@
+1:{'chanceCross': 0.75, 'chanceMutacao': 0.1, 'maxIter': 100, 'maxSemMelhora': 100, 'tamanhoPop': 10}
+2:{'chanceCross': 0.75, 'chanceMutacao': 0.1, 'maxIter': 100, 'maxSemMelhora': 100, 'tamanhoPop': 20}
+3:{'chanceCross': 0.75, 'chanceMutacao': 0.1, 'maxIter': 100, 'maxSemMelhora': 100, 'tamanhoPop': 30}
+4:{'chanceCross': 0.75, 'chanceMutacao': 0.1, 'maxIter': 200, 'maxSemMelhora': 50, 'tamanhoPop': 20}
+5:{'chanceCross': 0.75, 'chanceMutacao': 0.1, 'maxIter': 350, 'maxSemMelhora': 100, 'tamanhoPop': 10}
+6:{'chanceCross': 0.75, 'chanceMutacao': 0.3, 'maxIter': 200, 'maxSemMelhora': 30, 'tamanhoPop': 10}
+7:{'chanceCross': 0.75, 'chanceMutacao': 0.3, 'maxIter': 350, 'maxSemMelhora': 50, 'tamanhoPop': 30}
+8:{'chanceCross': 0.75, 'chanceMutacao': 0.3, 'maxIter': 350, 'maxSemMelhora': 100, 'tamanhoPop': 10}
+9:{'chanceCross': 0.95, 'chanceMutacao': 0.2, 'maxIter': 500, 'maxSemMelhora': 100, 'tamanhoPop': 20}
+10:{'chanceCross': 0.95, 'chanceMutacao': 0.3, 'maxIter': 350, 'maxSemMelhora': 100, 'tamanhoPop': 10}
