@@ -23,12 +23,6 @@ resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
 geneticoReader = resultadosFileReader("resultadoTreinamentoAlgoritmo Genetico.result")
 resultadosTreinamentos["Algoritmo Genetico"] = geneticoReader.read()
 
-# Apresenta os parametros decididos
-print("Parametros Algoritmo Genetico:", resultadosTreinamentos["Algoritmo Genetico"][0][1])
-print("Parametros Beam Search:", resultadosTreinamentos["Beam Search"][0][1])
-print("Parametros Simulated Annealing:", resultadosTreinamentos["Simulated Annealing"][0][1])
-print("Parametros GRASP:", resultadosTreinamentos["GRASP"][0][1])
-
 # resultados dos testes
 resultadosTestes = {
     "Hill Climbing" : trabalhoIA.teste(problemasTeste, hillClimbing),
