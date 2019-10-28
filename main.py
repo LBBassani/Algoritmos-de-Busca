@@ -136,32 +136,35 @@ for prob, valor in normalizadoPorProblemaTeste.items():
         normalizadoPorHeuristica[meta].append(resul)
 
 # Obter média e descio padrão dos resultados normalizados de cada metaheurística
-meanstdNormalizadas = { }
-for al, valor in normalizadoPorHeuristica.items():
-    aux = pd.Series(valor)
-    meanstdNormalizadas[al] = (aux.mean(), aux.std())
+with open("Resultados/MediasStd.txt", "w") as fp:
+    fp.write("Algoritmo\tMedia Absoluta\tDesvio Absoluto\tMedia Normalizada\tDesvio Normalizado\tMedia Tempo\tDesvio Tempo\n")
+    meanstdNormalizadas = { }
+    for al, valor in normalizadoPorHeuristica.items():
+        aux = pd.Series(valor)
+        meanstdNormalizadas[al] = (aux.mean(), aux.std())
 
-resultadosPorHeuristica = { }
-for al, valor in resultadosTestes.items():
-    valor = valor[0]
-    resultadosPorHeuristica[al] = list()
-    for v in valor:
-        resultadosPorHeuristica[al].append(v["Resultados"]["Resposta"][1])
+    resultadosPorHeuristica = { }
+    for al, valor in resultadosTestes.items():
+        valor = valor[0]
+        resultadosPorHeuristica[al] = list()
+        for v in valor:
+            resultadosPorHeuristica[al].append(v["Resultados"]["Resposta"][1])
 
-meanstdHeuristicas = { }
-for al, valor in resultadosPorHeuristica.items():
-    aux = pd.Series(valor)
-    meanstdHeuristicas[al] = (aux.mean(), aux.std())
+    meanstdHeuristicas = { }
+    for al, valor in resultadosPorHeuristica.items():
+        aux = pd.Series(valor)
+        meanstdHeuristicas[al] = (aux.mean(), aux.std())
 
-temposExecucao = { }
-for al, valor in resultadosTestes.items():
-    valor = valor[1]
-    temposExecucao[al] = valor
+    temposExecucao = { }
+    for al, valor in resultadosTestes.items():
+        valor = valor[1]
+        temposExecucao[al] = valor
 
-meanstdTempos = { }
-for al, valor in temposExecucao.items():
-    aux = pd.Series(valor)
-    meanstdTempos[al] = (aux.mean(), aux.std())
+    meanstdTempos = { }
+    for al, valor in temposExecucao.items():
+        aux = pd.Series(valor)
+        meanstdTempos[al] = (aux.mean(), aux.std())
+        fp.write(str(al)+ "\t" + str(meanstdHeuristicas[al][0]) + "\t" + str(meanstdHeuristicas[al][1]) + "\t" + str(meanstdNormalizadas[al][0]) + "\t" + str(meanstdNormalizadas[al][1]) + "\t" + str(meanstdTempos[al][0]) + "\t" + str(meanstdTempos[al][1]) + "\n")
 
 # Impressão dos BoxPlots
 tempos = list()
