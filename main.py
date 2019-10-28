@@ -38,19 +38,20 @@ from matplotlib import pyplot as plt
 import trabalhoIA
 
 import scriptTreinamento
+
 # Leitura dos Resultados do Treinamento
 resultadosTreinamentos = { }
 
-graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
+graspReader = resultadosFileReader("Resultados/resultadoTreinamentoGRASP.result")
 resultadosTreinamentos["GRASP"] = graspReader.read()
 
-beamSearchReader = resultadosFileReader("resultadoTreinamentoBeam Search.result")
+beamSearchReader = resultadosFileReader("Resultados/resultadoTreinamentoBeam Search.result")
 resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
 
-simulatedAnnealingReader = resultadosFileReader("resultadoTreinamentoSimulated Annealing.result")
+simulatedAnnealingReader = resultadosFileReader("Resultados/resultadoTreinamentoSimulated Annealing.result")
 resultadosTreinamentos["Simulated Annealing"] = simulatedAnnealingReader.read()
 
-geneticoReader = resultadosFileReader("resultadoTreinamentoAlgoritmo Genetico.result")
+geneticoReader = resultadosFileReader("Resultados/resultadoTreinamentoAlgoritmo Genetico.result")
 resultadosTreinamentos["Algoritmo Genetico"] = geneticoReader.read()
 
 # Impressão dos BoxPlots
@@ -75,6 +76,7 @@ for nome, meta in resultadosTreinamentos.items():
     resultados = pd.concat(resultados)
     resultados = pd.melt(resultados, id_vars=["Hiperparametros"], value_name="Resultados")
     sea.boxplot(x = "Hiperparametros", y = "Resultados", data= resultados)
+    plt.title("Resultados Treinamento "+nome)
     plt.savefig("Resultados/ResultadosTreinamento"+ nome +".png")
     
 
@@ -82,8 +84,10 @@ for nome, meta in resultadosTreinamentos.items():
 tempos = pd.concat(tempos)
 tempos = pd.melt(tempos, id_vars=["Algoritmo"],value_name="Tempo")
 sea.boxplot(x = "Algoritmo", y = "Tempo", data = tempos)
+plt.title("Tempos de Treinamento")
 plt.savefig("Resultados/TemposTreinamento.png")
 
+import scriptTeste
 
 # Leitura dos arquivos de resultados
 resultadosTestes = { }
@@ -177,10 +181,12 @@ for nome, meta in resultadosTestes.items():
 tempos = pd.concat(tempos)
 tempos = pd.melt(tempos, id_vars=["Algoritmo"],value_name="Tempo")
 sea.boxplot(x = "Algoritmo", y = "Tempo", data = tempos)
+plt.title("Tempos de Teste")
 plt.savefig("Resultados/TemposTeste.png")
 
 # Boxplot dos resultados de treinamento
 resultados = pd.concat(resultados)
 resultados = pd.melt(resultados, id_vars=["Algoritmo"], value_name="Resultados")
 sea.boxplot(x = "Algoritmo", y = "Resultados", data= resultados)
+plt.title("Resultados de Teste")
 plt.savefig("Resultados/ResultadosTeste.png")
