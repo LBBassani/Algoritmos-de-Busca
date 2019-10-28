@@ -216,13 +216,33 @@ for p, resul in resultadosProblemas.items():
             mediaRanque[r[1][1]].append(r[0])
             fp.write(str(r[0]) + "\t" + str(r[1][1]) + "\t" + str(r[1][0]) + "\n" )
 
-with open("Resultados/Ranque.txt", "w") as fp:
-    p = len(problemasTeste.items())
-    medias = {}
-    fp.write("Algoritmo\tMedia Ranque\n")
-    for al, r in mediaRanque.items():
-        fp.write(str(al)+"\t"+str(sum(mediaRanque[al]) / p) + "\n")
+p = len(problemasTeste.items())
+filaMedia = PriorityQueue()
+for al, m in mediaRanque.items():
+    filaMedia.put((sum(m)/p, al))
+listaMedia = list()
+while not filaMedia.empty():
+    listaMedia.append(filaMedia.get())
+listaMedia.reverse()
 
+with open("Resultados/Ranque.txt", "w") as fp:
+    fp.write("Algoritmo\tMedia Ranque\n")
+    print("\nAlgoritmos em Ordem de Media de Ranqueamento")
+    for m in listaMedia:
+        print(m[0], m[1])
+        fp.write(str(m[1])+"\t"+str(m[0]) + "\n")
+
+filaMedia = PriorityQueue()
+for al, m in meanstdNormalizadas.items():
+    filaMedia.put((m[0], al))
+listaMedia = list()
+while not filaMedia.empty():
+    listaMedia.append(filaMedia.get())
+listaMedia.reverse()
+
+print("\nAlgoritmos em ordem de média Normalizada")
+for m in listaMedia:
+    print(m[0], m[1])
 
 # Impressão dos BoxPlots
 tempos = list()
