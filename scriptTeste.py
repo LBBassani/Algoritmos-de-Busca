@@ -11,16 +11,16 @@ import trabalhoIA
 # Leitura dos Resultados do Treinamento
 resultadosTreinamentos = { }
 
-graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
+graspReader = resultadosFileReader("Resultados/resultadoTreinamentoGRASP.result")
 resultadosTreinamentos["GRASP"] = graspReader.read()
 
-simulatedAnnealingReader = resultadosFileReader("resultadoTreinamentoSimulated Annealing.result")
+simulatedAnnealingReader = resultadosFileReader("Resultados/resultadoTreinamentoSimulated Annealing.result")
 resultadosTreinamentos["Simulated Annealing"] = simulatedAnnealingReader.read()
 
-beamSearchReader = resultadosFileReader("resultadoTreinamentoBeam Search.result")
+beamSearchReader = resultadosFileReader("Resultados/resultadoTreinamentoBeam Search.result")
 resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
 
-geneticoReader = resultadosFileReader("resultadoTreinamentoAlgoritmo Genetico.result")
+geneticoReader = resultadosFileReader("Resultados/resultadoTreinamentoAlgoritmo Genetico.result")
 resultadosTreinamentos["Algoritmo Genetico"] = geneticoReader.read()
 
 # resultados dos testes
