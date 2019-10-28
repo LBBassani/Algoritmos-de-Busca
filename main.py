@@ -37,14 +37,15 @@ import seaborn as sea
 from matplotlib import pyplot as plt
 import trabalhoIA
 
+import scriptTreinamento
 # Leitura dos Resultados do Treinamento
 resultadosTreinamentos = { }
 
-""" graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
+graspReader = resultadosFileReader("resultadoTreinamentoGRASP.result")
 resultadosTreinamentos["GRASP"] = graspReader.read()
 
 beamSearchReader = resultadosFileReader("resultadoTreinamentoBeam Search.result")
-resultadosTreinamentos["Beam Search"] = beamSearchReader.read() """
+resultadosTreinamentos["Beam Search"] = beamSearchReader.read()
 
 simulatedAnnealingReader = resultadosFileReader("resultadoTreinamentoSimulated Annealing.result")
 resultadosTreinamentos["Simulated Annealing"] = simulatedAnnealingReader.read()
