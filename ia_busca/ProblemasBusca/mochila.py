@@ -2,7 +2,7 @@ import random as r
 import math as m
 from .IProblema import IProblema, IProblemaBranchAndBound, IProblemaDescida, IProblemaGenetico, IProblemaGRASP, IProblemaSimulatedAnnealing
 
-class mochila(IProblemaBranchAndBound, IProblemaDescida, IProblemaGRASP, IProblemaSimulatedAnnealing, IProblemaGenetico, IProblema):
+class Mochila(IProblemaBranchAndBound, IProblemaDescida, IProblemaGRASP, IProblemaSimulatedAnnealing, IProblemaGenetico, IProblema):
 
     def __init__(self, valores, maxTam):
         # valores da mochila: O valor do elemento está em 0 e o volume em 1
